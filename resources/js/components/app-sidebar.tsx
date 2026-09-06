@@ -1,5 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
-import { BookOpen, FolderGit2, LayoutGrid } from 'lucide-react';
+import { BookOpen, FolderGit2, LayoutGrid,Users,UserRoundCog, Plane,Wrench,Boxes,ChartNoAxesColumn } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
@@ -14,7 +14,7 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { dashboard } from '@/routes';
+import { dashboard,materials } from '@/routes';
 import type { NavItem } from '@/types';
 
 export function AppSidebar() {
@@ -23,11 +23,37 @@ export function AppSidebar() {
         ? dashboard(page.props.currentTeam.slug)
         : '/';
 
+
     const mainNavItems: NavItem[] = [
         {
-            title: 'Dashboard',
+            title: 'Início',
             href: dashboardUrl,
-            icon: LayoutGrid,
+            icon: ChartNoAxesColumn,
+        },
+         {
+            title: 'Usuários',
+            href: '',
+            icon: Users,
+        },
+         {
+            title: 'Mecânicos',
+            href: '',
+            icon: UserRoundCog,
+        },
+         {
+            title: 'Aeronaves',
+            href: '',
+            icon: Plane,
+        },
+         {
+            title: 'Materiais',
+            href: materials(),
+            icon: Boxes,
+        },
+         {
+            title: 'Serviços',
+            href: '',
+            icon: Wrench,
         },
     ];
 
@@ -56,11 +82,11 @@ export function AppSidebar() {
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 </SidebarMenu>
-                <SidebarMenu>
+                {/*<SidebarMenu>
                     <SidebarMenuItem>
                         <TeamSwitcher />
                     </SidebarMenuItem>
-                </SidebarMenu>
+                </SidebarMenu> */}
             </SidebarHeader>
 
             <SidebarContent>
@@ -68,7 +94,7 @@ export function AppSidebar() {
             </SidebarContent>
 
             <SidebarFooter>
-                <NavFooter items={footerNavItems} className="mt-auto" />
+              {/*  <NavFooter items={footerNavItems} className="mt-auto" /> */}
                 <NavUser />
             </SidebarFooter>
         </Sidebar>
