@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::inertia("/", "welcome")->name("home");
 
+//####################### FAN #####################
 //Route::inertia('/materials', 'materials'); //Simple route to render the materials page without a controller and data fetching. --- IGNORE ---
 Route::get("/materials", [MaterialsController::class, "index"])->name(
     "materials",
@@ -17,7 +18,19 @@ Route::get("/addmaterial", [MaterialsController::class, "add"])->name(
 );
 Route::post("/addmaterial", [MaterialsController::class, "store"])->name(
     "materials.store",
-); //This route is for storing new materials. --- IGNORE ---
+);
+
+Route::get("materials/edit/{material}", [
+    MaterialsController::class,
+    "edit",
+])->name("editmaterial");
+
+Route::put("materials/edit/{material}", [
+    MaterialsController::class,
+    "update",
+])->name("materials.update");
+
+//####################### FAN #####################
 
 Route::prefix("{current_team}")
     ->middleware(["auth", "verified", EnsureTeamMembership::class])

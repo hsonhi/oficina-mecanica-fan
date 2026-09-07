@@ -6,16 +6,18 @@ use App\Models\Material;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class MaterialsController extends Controller
 {
     public function index()
     {
         // Fetch paginated users from the database
-        $materials = Material::select("id", "nome", "descricao", "valor")
+        $materials = Material::select("ID", "NOME", "DESCRICAO", "VALOR")
             //->latest()
             //paginate(10);
-            ->orderBy("id", "desc")
+            ->orderBy("ID", "desc")
             ->paginate(10);
 
         // Pass data to the frontend component via Inertia props
@@ -38,13 +40,19 @@ class MaterialsController extends Controller
             "materials" => $materials,
         ]);
     }
+    public function edit(Material $material)
+    {
+        return Inertia::render("editmaterial", [
+            "material" => $material,
+        ]);
+    }
 
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            "nome" => ["required", "string", "max:255"],
-            "descricao" => ["required", "string"],
-            "valor" => ["required", "numeric", "min:0"],
+            "NOME" => ["required", "string", "max:255"],
+            "DESCRICAO" => ["required", "string"],
+            "VALOR" => ["required", "numeric", "min:0"],
         ]);
 
         /* $team = Material::create([
@@ -61,6 +69,36 @@ class MaterialsController extends Controller
             "message" => __("Material created."),
         ]);
 
+        return to_route("materials", ["materials" => $material->id]);
+    }
+
+    public function update(
+        Request $request,
+        Material $material,
+    ): RedirectResponse {
+        // Enable query logging for debugging
+        //DB::enableQueryLog();
+        //dd($request->all(), $material->toArray());
+
+        $validated = $request->validate([
+            "NOME" => ["required", "string", "max:255"],
+            "DESCRICAO" => ["required", "string"],
+            "VALOR" => ["required", "numeric", "min:0"],
+        ]);
+
+        $material = Material::whereKey($material->ID)
+            ->lockForUpdate()
+            ->firstOrFail();
+
+        $material->update($validated);
+
+        Inertia::flash("toast", [
+            "type" => "success",
+            "message" => __("Material updated."),
+        ]);
+
+        // Catch query log for debugging purposes
+        //dd(DB::getQueryLog());
         return to_route("materials", ["materials" => $material->id]);
     }
 }

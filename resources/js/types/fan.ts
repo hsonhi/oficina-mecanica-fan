@@ -1,6 +1,6 @@
 export type Material = {
-    id: number;
-    nome: string;
-    descricao: string;
-    valor: number;
+    ID: number;
+    NOME: string;
+    DESCRICAO: string;
+    VALOR: number;
 };

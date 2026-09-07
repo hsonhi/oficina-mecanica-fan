@@ -6,12 +6,20 @@ import InputError from "@/components/input-error";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { materials, addmaterial } from "@/routes";
+import { useState } from 'react';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from '@/components/ui/tooltip';
+import { materials, addmaterial,editmaterial } from "@/routes";
 import type { Auth } from "@/types";
 import { send } from "@/routes/verification";
 import React from "react";
 import type { Material } from "@/types/fan";
-import { Eye, LogOut, Pencil, Plus } from "lucide-react";
+import { Eye, Trash, Pencil, Plus } from "lucide-react";
+import DeleteMaterialModal from '@/components/delete-material-modal';
+
 
 type Props = {
     materials: Material[];
@@ -21,8 +29,21 @@ export default function Materials({ materials }: Props) {
     // 🔍 This hooks directly into Inertia's global store to grab all active props
     const { props } = usePage();
 
+
+        const [deleteMaterialDialogOpen, setDeleteMaterialDialogOpen] =
+            useState(false);
+
+              const [materialToDelete, setMaterialToDelete] =
+                    useState<Material | null>(null);
+
     // Print this out in your browser console (F12) to see what keys exist!
-    console.log("All incoming props from Laravel:", materials);
+    console.log("All incoming props from Laravel:", materials,/* props */);
+
+      const confirmDeleteMaterial = (material: Material) => {
+            setMaterialToDelete(material);
+            setDeleteMaterialDialogOpen(true);
+        };
+
 
     return (
         <>
@@ -58,32 +79,79 @@ export default function Materials({ materials }: Props) {
                                 <th className="px-6 py-3 text-left text-xs font-medium uppercase text-muted-foreground">
                                     Descrição
                                 </th>
+                                <th className="px-6 py-3 text-left text-xs font-medium uppercase text-muted-foreground">
+                                    Ações
+                                </th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-border">
                             {materials.data.map((mat) => (
                                 <tr
-                                    key={mat.id}
+                                    key={mat.ID}
                                     className="transition-colors hover:bg-accent/50"
                                 >
                                     <td className="px-6 py-4 text-sm font-medium">
-                                        {mat.nome}
+                                        {mat.NOME}
                                     </td>
                                     <td className="px-6 py-4 text-sm text-muted-foreground">
-                                        {mat.valor}
+                                        {mat.VALOR}
                                     </td>
                                     <td className="px-6 py-4 text-sm text-muted-foreground">
-                                        {mat.descricao}
+                                        {mat.DESCRICAO}
+                                    </td>
+                                    <td>
+                                        <Tooltip>
+                                                <TooltipTrigger asChild>
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        data-test="team-edit-button"
+                                                        asChild
+                                                    >
+                                                        <Link
+                                                            href={editmaterial(
+                                                                mat.ID,
+                                                            )}
+                                                        >
+                                                            <Pencil className="h-4 w-4" />
+                                                        </Link>
+                                                    </Button>
+                                                </TooltipTrigger>
+                                                <TooltipContent>
+                                                    <p>Editar material</p>
+                                                </TooltipContent>
+                                            </Tooltip>
+
+                                            <Tooltip>
+                                                <TooltipTrigger asChild>
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        data-test="team-edit-button"                                                        
+                                                        onClick={() =>
+                                                            confirmDeleteMaterial(
+                                                                mat,
+                                                            )
+                                                        }
+                                                    >
+                                                            <Trash className="h-4 w-4" />
+                                                    </Button>
+                                                </TooltipTrigger>
+                                                <TooltipContent>
+                                                    <p>Remover material</p>
+                                                </TooltipContent>
+                                            </Tooltip>
+
                                     </td>
                                 </tr>
                             ))}
                             {materials.length === 0 ? (
                                 <tr>
                                     <td
-                                        colSpan={4}
+                                        colSpan={5}
                                         className="px-6 py-4 text-center text-sm text-muted-foreground"
                                     >
-                                        No users found.
+                                        Não foram encontrados materiais.
                                     </td>
                                 </tr>
                             ) : null}
@@ -94,19 +162,35 @@ export default function Materials({ materials }: Props) {
                 {/* Simple Pagination Links */}
                 {/* href={link.url || '#'}
                             dangerouslySetInnerHTML={{ __html: link.label }} */}
+                                        {/* Tabler Pagination */}
+            
+             <p className="m-0">
+                    Showing <span>{materials.from}</span> to <span>{materials.to}</span> of <span>{materials.total}</span> entries
+                </p>
+
                 <div className="mt-4 flex gap-1 justify-center">
-                    {materials.data.map((link, idx) => (
+                    {materials.links.map((link, index) => (
                         <Link
-                            key={idx}
+                            key={index}
                             className={`rounded border border-border px-3 py-1 text-sm transition-colors ${
                                 link.active
                                     ? "border-primary bg-primary text-primary-foreground"
                                     : "text-muted-foreground hover:bg-accent"
                             } ${!link.url ? "opacity-50 cursor-not-allowed" : ""}`}
+                             href={link.url || '#'}
+                              // optional: preserveScroll
+                               dangerouslySetInnerHTML={{ __html: link.label }}
                         />
                     ))}
                 </div>
             </div>
+
+             <DeleteMaterialModal
+                            material={materialToDelete}
+                            open={deleteMaterialDialogOpen}
+                            onOpenChange={setDeleteMaterialDialogOpen}
+                        />
+
         </>
     );
 }

@@ -1,27 +1,32 @@
 import { Form, Head } from "@inertiajs/react";
-import MaterialsController from "@/actions/App/Http/Controllers";
 import Heading from "@/components/heading";
 import InputError from "@/components/input-error";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { materials } from "@/routes";
+import type { Material } from "@/types/fan";
+import { Textarea } from "@/components/ui/textarea";
 import { Save } from "lucide-react";
+import MaterialsController from "@/actions/App/Http/Controllers";
 
-export default function AddMaterial() {
+type Props = {
+    material: Material;
+};
+ 
+export default function EditMaterial({ material }: Props) {
 
     return (
         <>
-            <Head title="Registar novo material" />
+           <Head title="Editar material" />
 
-            <h1 className="sr-only">Registar novo material</h1>
+            <h1 className="sr-only">Editar material</h1>
 
             <div className="space-y-6 p-6">
-                <Heading variant="default" title="Registar novo material" />
+                <Heading variant="default" title="Editar material" />
 
                 <Form
-                    {...MaterialsController.MaterialsController.store.form()}
+                    {...MaterialsController.MaterialsController.update.form(material.ID)}
                     options={{
                         preserveScroll: true,
                     }}
@@ -29,24 +34,6 @@ export default function AddMaterial() {
                 >
                     {({ processing, errors }) => (
                         <>
-                            <div>
-    <label htmlFor="username" className="block text-sm font-medium text-gray-700">Username</label>
-
-  <div className="mt-1 flex rounded-md shadow-sm">
-    <span className="inline-flex items-center rounded-l-md border border-r-0 border-gray-300 bg-gray-50 px-3 text-sm text-gray-500">
-      https://
-    </span>
-    <input 
-      type="text" 
-      name="username" 
-      id="username" 
-      className="block w-full min-w-0 flex-1 rounded-none rounded-r-md border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-indigo-500" 
-      placeholder="example.com"
-    />
-  </div>
-</div>
-
-
                             <div className="flex flex-col md:flex-row gap-4">
                                 <div className="flex-1">
                                     <Label htmlFor="NOME">Nome</Label>
@@ -57,6 +44,7 @@ export default function AddMaterial() {
                                         required
                                         autoComplete="name"
                                         placeholder=""
+                                        defaultValue={material.NOME}
                                     />
                                 </div>
 
@@ -70,6 +58,7 @@ export default function AddMaterial() {
                                         required
                                         autoComplete="name"
                                         placeholder=""
+                                        defaultValue={material.VALOR}
                                     />
                                 </div>
                             </div>
@@ -85,6 +74,7 @@ export default function AddMaterial() {
                                     required
                                     autoComplete="username"
                                     placeholder=""
+                                     defaultValue={material.DESCRICAO}
                                 />
 
                                 <InputError
@@ -108,15 +98,16 @@ export default function AddMaterial() {
     );
 }
 
-AddMaterial.layout = {
+
+EditMaterial.layout = (props: { material: { DESCRICAO: string } }) => ({
     breadcrumbs: [
         {
             title: "Materiais",
             href: materials(),
         },
         {
-            title: "Registar novo material",
-            href: "",
+            title: props.material.DESCRICAO,
+            href: '',
         },
     ],
-};
+});
