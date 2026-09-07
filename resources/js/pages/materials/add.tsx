@@ -1,32 +1,26 @@
 import { Form, Head } from "@inertiajs/react";
+import MaterialsController from "@/actions/App/Http/Controllers";
 import Heading from "@/components/heading";
 import InputError from "@/components/input-error";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { materials } from "@/routes";
-import type { Material } from "@/types/fan";
 import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { index as materials } from "@/routes/materials";
 import { Save } from "lucide-react";
-import MaterialsController from "@/actions/App/Http/Controllers";
 
-type Props = {
-    material: Material;
-};
- 
-export default function EditMaterial({ material }: Props) {
-
+export default function AddMaterial() {
     return (
         <>
-           <Head title="Editar material" />
+            <Head title="Registar novo material" />
 
-            <h1 className="sr-only">Editar material</h1>
+            <h1 className="sr-only">Registar novo material</h1>
 
             <div className="space-y-6 p-6">
-                <Heading variant="default" title="Editar material" />
+                <Heading variant="default" title="Registar novo material" />
 
                 <Form
-                    {...MaterialsController.MaterialsController.update.form(material.ID)}
+                    {...MaterialsController.MaterialsController.store.form()}
                     options={{
                         preserveScroll: true,
                     }}
@@ -36,45 +30,48 @@ export default function EditMaterial({ material }: Props) {
                         <>
                             <div className="flex flex-col md:flex-row gap-4">
                                 <div className="flex-1">
-                                    <Label htmlFor="NOME">Nome</Label>
+                                    <Label htmlFor="nome">Nome</Label>
                                     <Input
-                                        id="NOME"
+                                        id="nome"
                                         className="mt-1 block w-full"
-                                        name="NOME"
+                                        name="nome"
                                         required
                                         autoComplete="name"
                                         placeholder=""
-                                        defaultValue={material.NOME}
                                     />
                                 </div>
 
                                 <div className="flex-1">
-                                    <Label htmlFor="VALOR">Preço</Label>
-                                    <Input
-                                        type="number"
-                                        id="VALOR"
-                                        className="mt-1 block w-full"
-                                        name="VALOR"
-                                        required
-                                        autoComplete="name"
-                                        placeholder=""
-                                        defaultValue={material.VALOR}
-                                    />
+                                    <Label htmlFor="valor">Preço</Label>
+
+                                    <div className="mt-1 flex rounded-md">
+                                        <span className="inline-flex items-center rounded-l-md border border-r-0 border-gray-300 bg-gray-50 px-3 text-sm text-gray-500">
+                                            AKZ
+                                        </span>
+                                        <Input
+                                            type="number"
+                                            id="valor"
+                                            className=" rounded-none rounded-r-md"
+                                            name="valor"
+                                            required
+                                            autoComplete="name"
+                                            placeholder=""
+                                        />
+                                    </div>
                                 </div>
                             </div>
 
                             <div className="grid gap-2">
-                                <Label htmlFor="DESCRICAO">Descrição</Label>
+                                <Label htmlFor="descricao">Descrição</Label>
 
                                 <Textarea
-                                    id="DESCRICAO"
+                                    id="descricao"
                                     rows={3}
                                     className="mt-1 block w-full"
-                                    name="DESCRICAO"
+                                    name="descricao"
                                     required
                                     autoComplete="username"
                                     placeholder=""
-                                     defaultValue={material.DESCRICAO}
                                 />
 
                                 <InputError
@@ -98,16 +95,15 @@ export default function EditMaterial({ material }: Props) {
     );
 }
 
-
-EditMaterial.layout = (props: { material: { DESCRICAO: string } }) => ({
+AddMaterial.layout = {
     breadcrumbs: [
         {
             title: "Materiais",
             href: materials(),
         },
         {
-            title: props.material.DESCRICAO,
-            href: '',
+            title: "Registar novo material",
+            href: "",
         },
     ],
-});
+};

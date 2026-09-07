@@ -1,6 +1,6 @@
-import { router } from '@inertiajs/react';
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
+import { router } from "@inertiajs/react";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
     Dialog,
     DialogClose,
@@ -9,9 +9,8 @@ import {
     DialogFooter,
     DialogHeader,
     DialogTitle,
-} from '@/components/ui/dialog';
-import { destroy as destroyInvitation } from '@/routes/teams/invitations';
-import { Material } from '@/types/fan';
+} from "@/components/ui/dialog";
+import { Material } from "@/types/fan";
 
 type Props = {
     material: Material | null;
@@ -31,22 +30,20 @@ export default function DeleteMaterialModal({
             return;
         }
 
-       /* router.visit(destroyInvitation([team.slug, invitation.code]), {
+        router.delete(`/materials/delete/${material.id}`, {
             onStart: () => setProcessing(true),
             onFinish: () => setProcessing(false),
             onSuccess: () => onOpenChange(false),
-        });*/
+        });
     };
 
-   
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>Remover material</DialogTitle>
                     <DialogDescription>
-                        Tem a certeza que deseja remover este material{' '}
-                        <strong>{open}{material?.NOME}</strong>?
+                        Tem a certeza que deseja remover este material?
                     </DialogDescription>
                 </DialogHeader>
 

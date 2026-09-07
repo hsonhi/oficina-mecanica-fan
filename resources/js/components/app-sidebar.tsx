@@ -1,10 +1,20 @@
-import { Link, usePage } from '@inertiajs/react';
-import { BookOpen, FolderGit2, LayoutGrid,Users,UserRoundCog, Plane,Wrench,Boxes,ChartNoAxesColumn } from 'lucide-react';
-import AppLogo from '@/components/app-logo';
-import { NavFooter } from '@/components/nav-footer';
-import { NavMain } from '@/components/nav-main';
-import { NavUser } from '@/components/nav-user';
-import { TeamSwitcher } from '@/components/team-switcher';
+import { Link, usePage } from "@inertiajs/react";
+import {
+    BookOpen,
+    FolderGit2,
+    LayoutGrid,
+    Users,
+    UserRoundCog,
+    Plane,
+    Wrench,
+    Boxes,
+    ChartNoAxesColumn,
+} from "lucide-react";
+import AppLogo from "@/components/app-logo";
+import { NavFooter } from "@/components/nav-footer";
+import { NavMain } from "@/components/nav-main";
+import { NavUser } from "@/components/nav-user";
+import { TeamSwitcher } from "@/components/team-switcher";
 import {
     Sidebar,
     SidebarContent,
@@ -13,59 +23,60 @@ import {
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
-} from '@/components/ui/sidebar';
-import { dashboard,materials } from '@/routes';
-import type { NavItem } from '@/types';
+} from "@/components/ui/sidebar";
+import { dashboard } from "@/routes";
+import { index as mechanics } from "@/routes/mechanics";
+import { index as materials } from "@/routes/materials";
+import type { NavItem } from "@/types";
 
 export function AppSidebar() {
     const page = usePage();
     const dashboardUrl = page.props.currentTeam
         ? dashboard(page.props.currentTeam.slug)
-        : '/';
-
+        : "/";
 
     const mainNavItems: NavItem[] = [
         {
-            title: 'Início',
+            title: "Início",
             href: dashboardUrl,
             icon: ChartNoAxesColumn,
         },
-         {
-            title: 'Usuários',
-            href: '',
+        {
+            title: "Usuários",
+            href: "",
             icon: Users,
         },
-         {
-            title: 'Mecânicos',
-            href: '',
+        {
+            title: "Mecânicos",
+            href: mechanics(),
             icon: UserRoundCog,
         },
-         {
-            title: 'Aeronaves',
-            href: '',
+        {
+            title: "Aeronaves",
+            href: "",
             icon: Plane,
         },
-         {
-            title: 'Materiais',
+        {
+            title: "Materiais",
             href: materials(),
             icon: Boxes,
         },
-         {
-            title: 'Serviços',
-            href: '',
+        {
+            title: "Serviços",
+            href: "",
             icon: Wrench,
         },
     ];
 
     const footerNavItems: NavItem[] = [
         {
-            title: 'Repository',
-            href: 'https://github.com/laravel/react-starter-kit',
+            title: "Repository",
+            href: "https://github.com/laravel/react-starter-kit",
             icon: FolderGit2,
         },
         {
-            title: 'Documentation',
-            href: 'https://laravel.com/docs/starter-kits#react',
+            title: "Documentation",
+            href: "https://laravel.com/docs/starter-kits#react",
             icon: BookOpen,
         },
     ];
@@ -94,7 +105,7 @@ export function AppSidebar() {
             </SidebarContent>
 
             <SidebarFooter>
-              {/*  <NavFooter items={footerNavItems} className="mt-auto" /> */}
+                {/*  <NavFooter items={footerNavItems} className="mt-auto" /> */}
                 <NavUser />
             </SidebarFooter>
         </Sidebar>

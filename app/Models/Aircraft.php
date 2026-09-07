@@ -3,11 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-#[Fillable(["nome", "descricao", "valor"])]
-class Material extends Model
+
+class Aircraft extends Model
 {
     // Explicitly define the database table name
-    protected $table = "_material";
+    protected $table = "_aeronaves";
 
     // Specify your primary key if it isn't 'id'
     //protected $primaryKey = "ID";
@@ -16,9 +16,11 @@ class Material extends Model
     //public $timestamps = false;
 
     protected $fillable = [
-        "nome",
-        "descricao",
-        "valor",
+        "chassi",
+        "ano",
+        "marca",
+        "modelo",
+        "cor",
         // Add all other fields you send from your Inertia form here
     ];
 }

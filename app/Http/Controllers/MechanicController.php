@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Material;
+use App\Models\Mechanic;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
-class MaterialsController extends Controller
+class MechanicController extends Controller
 {
     public function index(Request $request)
     {
@@ -26,12 +26,12 @@ class MaterialsController extends Controller
         ]);
 */
 
- return Inertia::render("materials/index", [
+ return Inertia::render("mechanics/index", [
             // Pass filtered and paginated results as a prop
-            "materials"=> Material::query()
+            "mechanics"=> Mechanic::query()
                 ->when($request->input('search'), function ($query, $search) {
                     $query->where('nome', 'like', "%{$search}%")
-                          ->orWhere('descricao', 'like', "%{$search}%");
+                          ->orWhere('telefone', 'like', "%{$search}%");
                 })
                 ->orderBy("id", "desc")
                 ->paginate(10)
@@ -54,13 +54,13 @@ class MaterialsController extends Controller
             ->paginate(10);
 
         // Pass data to the frontend component via Inertia props
-        return Inertia::render("materials/add", [
+        return Inertia::render("addmaterial", [
             "materials" => $materials,
         ]);
     }
     public function edit(Material $material)
     {
-        return Inertia::render("materials/edit", [
+        return Inertia::render("editmaterial", [
             "material" => $material,
         ]);
     }
@@ -87,7 +87,7 @@ class MaterialsController extends Controller
             "message" => __("Material created."),
         ]);
 
-        return to_route("materials.index", ["materials" => $material->id]);
+        return to_route("materials", ["materials" => $material->id]);
     }
 
     public function update(
@@ -117,7 +117,7 @@ class MaterialsController extends Controller
 
         // Catch query log for debugging purposes
         //dd(DB::getQueryLog());
-        return to_route("materials.index", ["materials" => $material->id]);
+        return to_route("materials", ["materials" => $material->id]);
     }
 
     /**
@@ -134,6 +134,6 @@ class MaterialsController extends Controller
             "message" => __("Material deleted."),
         ]);
 
-        return to_route("materials.index", ["materials" => $material->id]);
+        return to_route("materials", ["materials" => $material->id]);
     }
 }

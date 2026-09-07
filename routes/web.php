@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MaterialsController;
+use App\Http\Controllers\MechanicController;
+use App\Http\Controllers\AircraftController;
 use App\Http\Controllers\Teams\TeamInvitationController;
 use App\Http\Middleware\EnsureTeamMembership;
 use Illuminate\Support\Facades\Route;
@@ -9,27 +11,22 @@ use Illuminate\Support\Facades\Route;
 Route::inertia("/", "welcome")->name("home");
 
 //####################### FAN #####################
-//Route::inertia('/materials', 'materials'); //Simple route to render the materials page without a controller and data fetching. --- IGNORE ---
-Route::get("/materials", [MaterialsController::class, "index"])->name(
-    "materials",
-);
-Route::get("/addmaterial", [MaterialsController::class, "add"])->name(
-    "addmaterial",
-);
-Route::post("/addmaterial", [MaterialsController::class, "store"])->name(
-    "materials.store",
-);
 
-Route::get("materials/edit/{material}", [
-    MaterialsController::class,
-    "edit",
-])->name("editmaterial");
+Route::get("/materials", [MaterialsController::class, "index"])->name("materials.index");
+Route::get("/materials/add", [MaterialsController::class, "add"])->name("materials.add");
+Route::get("materials/edit/{material}", [MaterialsController::class, "edit"])->name("materials.edit");
 
-Route::put("materials/edit/{material}", [
-    MaterialsController::class,
-    "update",
-])->name("materials.update");
+Route::post("/materials/add", [MaterialsController::class, "store"])->name("materials.store");
+Route::put("materials/edit/{material}", [MaterialsController::class, "update"])->name("materials.update");
+Route::delete("materials/delete/{material}", [MaterialsController::class,"destroy"])->name("materials.destroy");
 
+//////////////////////////////////
+
+//Route::get("/mechanics", [MechanicController::class, "index"])->name("mechanics",);
+ 
+Route::middleware(['auth'])->group(function () {
+    Route::get('/mechanics', [MechanicController::class, 'index'])->name('mechanics.index');
+});
 //####################### FAN #####################
 
 Route::prefix("{current_team}")

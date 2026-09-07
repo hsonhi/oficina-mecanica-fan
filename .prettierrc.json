@@ -1,4 +1,4 @@
 {
   "plugins": ["@prettier/plugin-php"],
-  "parser": "php"
+  "parser": "typescript"
 }
