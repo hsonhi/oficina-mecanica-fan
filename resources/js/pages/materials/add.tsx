@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { index as materials } from "@/routes/materials";
+import { index as materials, store } from "@/routes/materials";
 import { Save } from "lucide-react";
 
 export default function AddMaterial() {
@@ -20,7 +20,7 @@ export default function AddMaterial() {
                 <Heading variant="default" title="Registar novo material" />
 
                 <Form
-                    {...MaterialsController.MaterialsController.store.form()}
+                    {...store.form()}
                     options={{
                         preserveScroll: true,
                     }}
@@ -36,8 +36,12 @@ export default function AddMaterial() {
                                         className="mt-1 block w-full"
                                         name="nome"
                                         required
-                                        autoComplete="name"
+                                        autoComplete="nome"
                                         placeholder=""
+                                    />
+                                    <InputError
+                                        className="mt-2"
+                                        message={errors.nome}
                                     />
                                 </div>
 
@@ -54,8 +58,12 @@ export default function AddMaterial() {
                                             className=" rounded-none rounded-r-md"
                                             name="valor"
                                             required
-                                            autoComplete="name"
+                                            autoComplete="valor"
                                             placeholder=""
+                                        />
+                                        <InputError
+                                            className="mt-2"
+                                            message={errors.valor}
                                         />
                                     </div>
                                 </div>
@@ -70,22 +78,16 @@ export default function AddMaterial() {
                                     className="mt-1 block w-full"
                                     name="descricao"
                                     required
-                                    autoComplete="username"
+                                    autoComplete="descricao"
                                     placeholder=""
                                 />
-
                                 <InputError
                                     className="mt-2"
                                     message={errors.descricao}
                                 />
                             </div>
                             <div className="flex items-center gap-4">
-                                <Button
-                                    disabled={processing}
-                                    data-test="update-profile-button"
-                                >
-                                    <Save /> Guardar
-                                </Button>
+                                <Button disabled={processing}>Guardar</Button>
                             </div>
                         </>
                     )}

@@ -10,27 +10,27 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog";
-import { Material } from "@/types/fan";
+import { Aircraft } from "@/types/fan";
 
 type Props = {
-    material: Material | null;
+    aircraft: Aircraft | null;
     open: boolean;
     onOpenChange: (open: boolean) => void;
 };
 
-export default function DeleteMaterialModal({
-    material,
+export default function DeleteAircraftModal({
+    aircraft,
     open,
     onOpenChange,
 }: Props) {
     const [processing, setProcessing] = useState(false);
 
-    const deleteMaterial = () => {
-        if (!material) {
+    const deleteAircraft = () => {
+        if (!aircraft) {
             return;
         }
 
-        router.delete(`/materials/delete/${material.id}`, {
+        router.delete(`/aircrafts/delete/${aircraft.id}`, {
             onStart: () => setProcessing(true),
             onFinish: () => setProcessing(false),
             onSuccess: () => onOpenChange(false),
@@ -41,9 +41,9 @@ export default function DeleteMaterialModal({
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Remover material</DialogTitle>
+                    <DialogTitle>Remover aeronave</DialogTitle>
                     <DialogDescription>
-                        Tem a certeza que deseja remover este material?
+                        Tem a certeza que deseja remover esta aeronave?
                     </DialogDescription>
                 </DialogHeader>
 
@@ -55,7 +55,7 @@ export default function DeleteMaterialModal({
                     <Button
                         variant="destructive"
                         disabled={processing}
-                        onClick={deleteMaterial}
+                        onClick={deleteAircraft}
                     >
                         Remover
                     </Button>

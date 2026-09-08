@@ -13,127 +13,69 @@ class AircraftController extends Controller
 {
     public function index(Request $request)
     {
-        // Fetch paginated users from the database
-      /*  $materials = Material::select("id", "nome", "descricao", "valor")
-            //->latest()
-            //paginate(10);
-            ->orderBy("id", "desc")
-            ->paginate(10);
-
-        // Pass data to the frontend component via Inertia props
-        return Inertia::render("materials", [
-            "materials" => $materials,
-        ]);
-*/
-
- return Inertia::render("materials", [
-            // Pass filtered and paginated results as a prop
-            "materials"=> Material::query()
+        return Inertia::render("aircrafts/index", [
+            "aircrafts"=> Aircraft::query()
                 ->when($request->input('search'), function ($query, $search) {
-                    $query->where('nome', 'like', "%{$search}%")
-                          ->orWhere('descricao', 'like', "%{$search}%");
+                    $query->where('chassi', 'like', "%{$search}%")
+                          ->orWhere('marca', 'like', "%{$search}%")
+                          ->orWhere('modelo', 'like', "%{$search}%");
                 })
                 ->orderBy("id", "desc")
                 ->paginate(10)
-                ->withQueryString(), // Keeps ?search=XYZ in pagination links
-
-            // Send the current search term back to populate the input field
+                ->withQueryString(),
             'filters' => $request->only(['search']),
         ]);
-
-
     }
 
     public function add()
     {
-        // Fetch paginated users from the database
-        $materials = Material::select("id", "nome", "descricao", "valor")
-            //->latest()
-            //paginate(10);
-            ->orderBy("id", "desc")
-            ->paginate(10);
-
-        // Pass data to the frontend component via Inertia props
-        return Inertia::render("addmaterial", [
-            "materials" => $materials,
-        ]);
+        return Inertia::render("aircrafts/add", ["aircrafts" => null,]);
     }
-    public function edit(Material $material)
+    public function edit(Aircraft $aircraft)
     {
-        return Inertia::render("editmaterial", [
-            "material" => $material,
-        ]);
+        return Inertia::render("aircrafts/edit", ["aircraft" => $aircraft]);
     }
 
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            "nome" => ["required", "string", "max:255"],
-            "descricao" => ["required", "string"],
-            "valor" => ["required", "numeric", "min:0"],
+            "chassi" => ["required", "string", "max:64"],
+            "ano" => ["required", "numeric", "min:0"],
+            "marca" => ["required", "string", "max:255"],
+            "modelo" => ["required", "string", "max:255"],
+            "cor" => ["required", "string", "max:64"],
         ]);
 
-        /* $team = Material::create([
-                'nome' => $request->validated('nome'),
-                'descricao' => $request->validated('descricao'),
-                'valor' => $request->validated('valor'),
-            ]);*/
+        $aircraft = Aircraft::create($validated);
 
-        $material = Material::create($validated);
-        //$team = $createTeam->handle($request->user(), $request->validated('name'));
-
-        Inertia::flash("toast", [
-            "type" => "success",
-            "message" => __("Material created."),
-        ]);
-
-        return to_route("materials", ["materials" => $material->id]);
+        Inertia::flash("toast", ["type" => "success", "message" => __("Aeronave registada com successo")]);
+        return to_route("aircrafts.index", ["aircrafts" => $aircraft->id]);
     }
 
-    public function update(
-        Request $request,
-        Material $material,
-    ): RedirectResponse {
-        // Enable query logging for debugging
-        //DB::enableQueryLog();
-        //dd($request->all(), $material->toArray());
-
+    public function update(Request $request,Aircraft $aircraft): RedirectResponse {
+        
         $validated = $request->validate([
-            "nome" => ["required", "string", "max:255"],
-            "descricao" => ["required", "string"],
-            "valor" => ["required", "numeric", "min:0"],
+            "chassi" => ["required", "string", "max:64"],
+            "ano" => ["required", "numeric", "min:0"],
+            "marca" => ["required", "string", "max:255"],
+            "modelo" => ["required", "string", "max:255"],
+            "cor" => ["required", "string", "max:64"],
         ]);
 
-        $material = Material::whereKey($material->id)
+        $aircraft = Aircraft::whereKey($aircraft->id)
             ->lockForUpdate()
             ->firstOrFail();
 
-        $material->update($validated);
+        $aircraft->update($validated);
 
-        Inertia::flash("toast", [
-            "type" => "success",
-            "message" => __("Material updated."),
-        ]);
-
-        // Catch query log for debugging purposes
-        //dd(DB::getQueryLog());
-        return to_route("materials", ["materials" => $material->id]);
+        Inertia::flash("toast", ["type" => "success", "message" => __("Aeronave atualizada com successo"),]);
+        return to_route("aircrafts.index", ["aircrafts" => $aircraft->id]);
     }
 
-    /**
-     * Delete the specified team.
-     */
-    public function destroy(
-        Request $request,
-        Material $material,
-    ): RedirectResponse {
-        $material->delete();
+    public function destroy(Request $request,Aircraft $aircraft): RedirectResponse {
 
-        Inertia::flash("toast", [
-            "type" => "success",
-            "message" => __("Material deleted."),
-        ]);
-
-        return to_route("materials", ["materials" => $material->id]);
+        $aircraft->delete();
+        Inertia::flash("toast", ["type" => "success","message" => __("Aeronave removida com successo")]);
+        return to_route("aircrafts.index", ["aircrafts" => $aircraft->id]);
     }
 }

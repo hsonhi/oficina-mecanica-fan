@@ -10,27 +10,27 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog";
-import { Material } from "@/types/fan";
+import { Mechanic } from "@/types/fan";
 
 type Props = {
-    material: Material | null;
+    mechanic: Mechanic | null;
     open: boolean;
     onOpenChange: (open: boolean) => void;
 };
 
-export default function DeleteMaterialModal({
-    material,
+export default function DeleteMechanicModal({
+    mechanic,
     open,
     onOpenChange,
 }: Props) {
     const [processing, setProcessing] = useState(false);
 
-    const deleteMaterial = () => {
-        if (!material) {
+    const deleteMechanic = () => {
+        if (!mechanic) {
             return;
         }
 
-        router.delete(`/materials/delete/${material.id}`, {
+        router.delete(`/mechanics/delete/${mechanic.id}`, {
             onStart: () => setProcessing(true),
             onFinish: () => setProcessing(false),
             onSuccess: () => onOpenChange(false),
@@ -41,9 +41,9 @@ export default function DeleteMaterialModal({
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Remover material</DialogTitle>
+                    <DialogTitle>Remover mecânico</DialogTitle>
                     <DialogDescription>
-                        Tem a certeza que deseja remover este material?
+                        Tem a certeza que deseja remover este mecânico?
                     </DialogDescription>
                 </DialogHeader>
 
@@ -55,7 +55,7 @@ export default function DeleteMaterialModal({
                     <Button
                         variant="destructive"
                         disabled={processing}
-                        onClick={deleteMaterial}
+                        onClick={deleteMechanic}
                     >
                         Remover
                     </Button>

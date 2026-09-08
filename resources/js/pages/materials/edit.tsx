@@ -4,7 +4,7 @@ import InputError from "@/components/input-error";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { index as materials } from "@/routes/materials";
+import { index as materials, update } from "@/routes/materials";
 import type { Material } from "@/types/fan";
 import { Textarea } from "@/components/ui/textarea";
 import { Save } from "lucide-react";
@@ -25,9 +25,7 @@ export default function EditMaterial({ material }: Props) {
                 <Heading variant="default" title="Editar material" />
 
                 <Form
-                    {...MaterialsController.MaterialsController.update.form(
-                        material.id,
-                    )}
+                    {...update.form(material.id)}
                     options={{
                         preserveScroll: true,
                     }}
@@ -43,9 +41,13 @@ export default function EditMaterial({ material }: Props) {
                                         className="mt-1 block w-full"
                                         name="nome"
                                         required
-                                        autoComplete="name"
+                                        autoComplete="nome"
                                         placeholder=""
                                         defaultValue={material.nome}
+                                    />
+                                    <InputError
+                                        className="mt-2"
+                                        message={errors.nome}
                                     />
                                 </div>
 
@@ -61,9 +63,13 @@ export default function EditMaterial({ material }: Props) {
                                             className=" rounded-none rounded-r-md"
                                             name="valor"
                                             required
-                                            autoComplete="name"
+                                            autoComplete="valor"
                                             placeholder=""
                                             defaultValue={material.valor}
+                                        />
+                                        <InputError
+                                            className="mt-2"
+                                            message={errors.valor}
                                         />
                                     </div>
                                 </div>
@@ -78,23 +84,17 @@ export default function EditMaterial({ material }: Props) {
                                     className="mt-1 block w-full"
                                     name="descricao"
                                     required
-                                    autoComplete="username"
+                                    autoComplete="descricao"
                                     placeholder=""
                                     defaultValue={material.descricao}
                                 />
-
                                 <InputError
                                     className="mt-2"
                                     message={errors.descricao}
                                 />
                             </div>
                             <div className="flex items-center gap-4">
-                                <Button
-                                    disabled={processing}
-                                    data-test="update-profile-button"
-                                >
-                                    <Save /> Guardar
-                                </Button>
+                                <Button disabled={processing}>Guardar</Button>
                             </div>
                         </>
                     )}

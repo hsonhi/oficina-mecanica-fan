@@ -13,21 +13,11 @@ class MaterialsController extends Controller
 {
     public function index(Request $request)
     {
-        // Fetch paginated users from the database
-      /*  $materials = Material::select("id", "nome", "descricao", "valor")
-            //->latest()
-            //paginate(10);
-            ->orderBy("id", "desc")
-            ->paginate(10);
+        //  $materials = Material::select("id", "nome", "descricao", "valor")
+        //    ->orderBy("id", "desc")
+        //    ->paginate(10);
 
-        // Pass data to the frontend component via Inertia props
-        return Inertia::render("materials", [
-            "materials" => $materials,
-        ]);
-*/
-
- return Inertia::render("materials/index", [
-            // Pass filtered and paginated results as a prop
+        return Inertia::render("materials/index", [
             "materials"=> Material::query()
                 ->when($request->input('search'), function ($query, $search) {
                     $query->where('nome', 'like', "%{$search}%")
@@ -35,34 +25,18 @@ class MaterialsController extends Controller
                 })
                 ->orderBy("id", "desc")
                 ->paginate(10)
-                ->withQueryString(), // Keeps ?search=XYZ in pagination links
-
-            // Send the current search term back to populate the input field
+                ->withQueryString(),
             'filters' => $request->only(['search']),
         ]);
-
-
     }
 
     public function add()
     {
-        // Fetch paginated users from the database
-        $materials = Material::select("id", "nome", "descricao", "valor")
-            //->latest()
-            //paginate(10);
-            ->orderBy("id", "desc")
-            ->paginate(10);
-
-        // Pass data to the frontend component via Inertia props
-        return Inertia::render("materials/add", [
-            "materials" => $materials,
-        ]);
+        return Inertia::render("materials/add", ["materials" => null,]);
     }
     public function edit(Material $material)
     {
-        return Inertia::render("materials/edit", [
-            "material" => $material,
-        ]);
+        return Inertia::render("materials/edit", ["material" => $material]);
     }
 
     public function store(Request $request): RedirectResponse
@@ -73,30 +47,16 @@ class MaterialsController extends Controller
             "valor" => ["required", "numeric", "min:0"],
         ]);
 
-        /* $team = Material::create([
-                'nome' => $request->validated('nome'),
-                'descricao' => $request->validated('descricao'),
-                'valor' => $request->validated('valor'),
-            ]);*/
-
         $material = Material::create($validated);
-        //$team = $createTeam->handle($request->user(), $request->validated('name'));
 
-        Inertia::flash("toast", [
-            "type" => "success",
-            "message" => __("Material created."),
-        ]);
-
+        Inertia::flash("toast", ["type" => "success", "message" => __("Material registado com successo")]);
         return to_route("materials.index", ["materials" => $material->id]);
     }
 
-    public function update(
-        Request $request,
-        Material $material,
-    ): RedirectResponse {
-        // Enable query logging for debugging
-        //DB::enableQueryLog();
-        //dd($request->all(), $material->toArray());
+    public function update(Request $request,Material $material): RedirectResponse {
+        
+        //DB::enableQueryLog(); // Enable query logging for debugging
+        //dd($request->all(), $material->toArray()); // Debug request and material data
 
         $validated = $request->validate([
             "nome" => ["required", "string", "max:255"],
@@ -110,30 +70,16 @@ class MaterialsController extends Controller
 
         $material->update($validated);
 
-        Inertia::flash("toast", [
-            "type" => "success",
-            "message" => __("Material updated."),
-        ]);
+        Inertia::flash("toast", ["type" => "success", "message" => __("Material atualizado com successo"),]);
 
-        // Catch query log for debugging purposes
-        //dd(DB::getQueryLog());
+        //dd(DB::getQueryLog()); // Catch query log for debugging purposes
         return to_route("materials.index", ["materials" => $material->id]);
     }
 
-    /**
-     * Delete the specified team.
-     */
-    public function destroy(
-        Request $request,
-        Material $material,
-    ): RedirectResponse {
+    public function destroy(Request $request,Material $material): RedirectResponse {
+
         $material->delete();
-
-        Inertia::flash("toast", [
-            "type" => "success",
-            "message" => __("Material deleted."),
-        ]);
-
+        Inertia::flash("toast", ["type" => "success","message" => __("Material removido com successo")]);
         return to_route("materials.index", ["materials" => $material->id]);
     }
 }

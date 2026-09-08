@@ -27,6 +27,7 @@ import {
 import { dashboard } from "@/routes";
 import { index as mechanics } from "@/routes/mechanics";
 import { index as materials } from "@/routes/materials";
+import { index as aircrafts } from "@/routes/aircrafts";
 import type { NavItem } from "@/types";
 
 export function AppSidebar() {
@@ -53,7 +54,7 @@ export function AppSidebar() {
         },
         {
             title: "Aeronaves",
-            href: "",
+            href: aircrafts(),
             icon: Plane,
         },
         {
