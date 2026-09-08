@@ -1,4 +1,4 @@
-import { Head, Link, router } from "@inertiajs/react";
+import { Head, Link, router, usePage } from "@inertiajs/react";
 import Heading from "@/components/heading";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,41 +9,41 @@ import {
     TooltipTrigger,
 } from "@/components/ui/tooltip";
 import {
-    index as materials,
-    add as addmaterial,
-    edit as editmaterial,
-} from "@/routes/materials";
-import type { Material } from "@/types/fan";
-import { Trash, Pencil, Plus } from "lucide-react";
-import DeleteMaterialModal from "@/components/delete-material-modal";
+    index as services,
+    add as addservice,
+    edit as editservice,
+} from "@/routes/services";
+import type { Service } from "@/types/fan";
+import { Trash, Pencil, Plus, Calendar, Cog, Users, Eye } from "lucide-react";
+import DeleteServiceModal from "@/components/delete-service-modal";
 
 type Props = {
-    materials: any;
+    services: any;
     filters: any;
 };
 
-export default function Materials({ materials, filters }: Props) {
+export default function Materials({ services, filters }: Props) {
     // 🔍 This hooks directly into Inertia's global store to grab all active props
-    //const { props } = usePage();
+    const { props } = usePage();
     // Print this out in your browser console (F12) to see what keys exist!
-    //console.log("All incoming props from Laravel:", materials /* props */);
+    console.log("All incoming props from Laravel:", props /* props */);
 
-    const [deleteMaterialDialogOpen, setDeleteMaterialDialogOpen] =
+    const [deleteServiceDialogOpen, setDeleteServiceDialogOpen] =
         useState(false);
 
-    const [materialToDelete, setMaterialToDelete] = useState<Material | null>(
+    const [serviceToDelete, setServiceToDelete] = useState<Service | null>(
         null,
     );
 
-    const confirmDeleteMaterial = (material: Material) => {
-        setMaterialToDelete(material);
-        setDeleteMaterialDialogOpen(true);
+    const confirmDeleteService = (material: Service) => {
+        setServiceToDelete(material);
+        setDeleteServiceDialogOpen(true);
     };
 
     const [search, setSearch] = useState(filters.search || "");
     useEffect(() => {
         router.get(
-            "/materials",
+            "/services",
             { search },
             {
                 preserveState: true,
@@ -54,23 +54,23 @@ export default function Materials({ materials, filters }: Props) {
 
     return (
         <>
-            <Head title="Materiais" />
+            <Head title="Serviços" />
 
             <div className="mx-auto p-6">
                 <div className="flex items-center justify-between">
                     <Heading
-                        title="Materiais"
-                        description="Registo de materiais"
+                        title="Serviços"
+                        description="Registo de serviços"
                     />
                 </div>
 
                 <div className="flex justify-between items-center mb-4">
                     <Link
                         className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground shadow-xs hover:bg-primary/90  px-4 py-2 has-[>svg]:px-3"
-                        href={addmaterial()}
+                        href={addservice()}
                         prefetch
                     >
-                        <Plus /> Registar novo material
+                        <Plus /> Registar serviço
                     </Link>
                     <Input
                         type="search"
@@ -86,13 +86,19 @@ export default function Materials({ materials, filters }: Props) {
                         <thead className="bg-muted/60">
                             <tr>
                                 <th className="px-6 py-3 text-left text-xs font-medium uppercase text-muted-foreground">
-                                    Nome
+                                    Aeronave
                                 </th>
                                 <th className="px-6 py-3 text-left text-xs font-medium uppercase text-muted-foreground">
-                                    Preço
+                                    Data
                                 </th>
                                 <th className="px-6 py-3 text-left text-xs font-medium uppercase text-muted-foreground">
-                                    Descrição
+                                    Mecânicos
+                                </th>
+                                <th className="px-6 py-3 text-left text-xs font-medium uppercase text-muted-foreground">
+                                    Materiais
+                                </th>
+                                <th className="px-6 py-3 text-left text-xs font-medium uppercase text-muted-foreground">
+                                    Estado
                                 </th>
                                 <th className="px-6 py-3 text-left text-xs font-medium uppercase text-muted-foreground">
                                     Ações
@@ -100,16 +106,49 @@ export default function Materials({ materials, filters }: Props) {
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-border">
-                            {materials.data.map((mat: any) => (
+                            {services.data.map((mat: any) => (
                                 <tr
                                     key={mat.id}
                                     className="transition-colors hover:bg-accent/50"
                                 >
                                     <td className="px-6 py-4 text-sm font-medium">
-                                        {mat.nome}
+                                        {" "}
+                                        {mat.aircrafts.chassi}{" "}
+                                        {mat.aircrafts.marca}{" "}
+                                        {mat.aircrafts.modelo}
                                     </td>
                                     <td className="px-6 py-4 text-sm text-muted-foreground">
-                                        {mat.valor} AKZ
+                                        <div className="flex items-center space-x-2">
+                                            <Calendar className="text-sm" />
+                                            <span className="">
+                                                {mat.data_inicio} -{" "}
+                                                {mat.data_fim}
+                                            </span>
+                                        </div>
+                                    </td>
+                                    <td className="px-6 py-4 text-sm text-muted-foreground">
+                                        <div className="flex items-center space-x-2">
+                                            <Users className="text-sm" />
+                                            <span className="">
+                                                {
+                                                    /*mat.mechanics.map((m: any) => (
+                                            <span> {m.nome}</span>
+                                        )) */ mat.mechanics.length
+                                                }
+                                            </span>
+                                        </div>
+                                    </td>
+                                    <td className="px-6 py-4 text-sm text-muted-foreground">
+                                        <div className="flex items-center space-x-2">
+                                            <Cog className="text-sm" />
+                                            <span className="">
+                                                {
+                                                    /*mat.materials.map((m: any) => (
+                                            <span> {m.nome}</span>
+                                        )) */ mat.materials.length
+                                                }
+                                            </span>
+                                        </div>
                                     </td>
                                     <td className="px-6 py-4 text-sm text-muted-foreground">
                                         {mat.descricao}
@@ -124,7 +163,29 @@ export default function Materials({ materials, filters }: Props) {
                                                     asChild
                                                 >
                                                     <Link
-                                                        href={editmaterial(
+                                                        href={editservice(
+                                                            mat.id,
+                                                        )}
+                                                    >
+                                                        <Eye className="h-4 w-4" />
+                                                    </Link>
+                                                </Button>
+                                            </TooltipTrigger>
+                                            <TooltipContent>
+                                                <p>Visualizar serviço</p>
+                                            </TooltipContent>
+                                        </Tooltip>
+
+                                        <Tooltip>
+                                            <TooltipTrigger asChild>
+                                                <Button
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    data-test="team-edit-button"
+                                                    asChild
+                                                >
+                                                    <Link
+                                                        href={editservice(
                                                             mat.id,
                                                         )}
                                                     >
@@ -133,7 +194,7 @@ export default function Materials({ materials, filters }: Props) {
                                                 </Button>
                                             </TooltipTrigger>
                                             <TooltipContent>
-                                                <p>Editar material</p>
+                                                <p>Editar serviço</p>
                                             </TooltipContent>
                                         </Tooltip>
 
@@ -144,7 +205,7 @@ export default function Materials({ materials, filters }: Props) {
                                                     size="sm"
                                                     data-test="team-edit-button"
                                                     onClick={() =>
-                                                        confirmDeleteMaterial(
+                                                        confirmDeleteService(
                                                             mat,
                                                         )
                                                     }
@@ -153,13 +214,13 @@ export default function Materials({ materials, filters }: Props) {
                                                 </Button>
                                             </TooltipTrigger>
                                             <TooltipContent>
-                                                <p>Remover material</p>
+                                                <p>Remover serviço</p>
                                             </TooltipContent>
                                         </Tooltip>
                                     </td>
                                 </tr>
                             ))}
-                            {materials.data.length === 0 ? (
+                            {services.data.length === 0 ? (
                                 <tr>
                                     <td
                                         colSpan={5}
@@ -178,7 +239,7 @@ export default function Materials({ materials, filters }: Props) {
                 </p> */}
 
                 <div className="mt-4 flex gap-1 justify-center">
-                    {materials.links.map((link: any, index: number) => (
+                    {services.links.map((link: any, index: number) => (
                         <Link
                             key={index}
                             className={`rounded border border-border px-3 py-1 text-sm transition-colors ${
@@ -194,10 +255,10 @@ export default function Materials({ materials, filters }: Props) {
                 </div>
             </div>
 
-            <DeleteMaterialModal
-                material={materialToDelete}
-                open={deleteMaterialDialogOpen}
-                onOpenChange={setDeleteMaterialDialogOpen}
+            <DeleteServiceModal
+                service={serviceToDelete}
+                open={deleteServiceDialogOpen}
+                onOpenChange={setDeleteServiceDialogOpen}
             />
         </>
     );
@@ -206,8 +267,8 @@ export default function Materials({ materials, filters }: Props) {
 Materials.layout = {
     breadcrumbs: [
         {
-            title: "Materiais",
-            href: materials(),
+            title: "Serviços",
+            href: services(),
         },
     ],
 };

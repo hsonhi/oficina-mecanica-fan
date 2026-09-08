@@ -19,3 +19,12 @@ export type Aircraft = {
     modelo: string;
     cor: string;
 };
+
+export type Service = {
+    id: number;
+    utilizador_id: number;
+    aeronave_id: number;
+    data_inicio: string;
+    data_fim: string;
+    descricao: string;
+};

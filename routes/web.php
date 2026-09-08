@@ -4,6 +4,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MaterialsController;
 use App\Http\Controllers\MechanicController;
 use App\Http\Controllers\AircraftController;
+use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\Teams\TeamInvitationController;
 use App\Http\Middleware\EnsureTeamMembership;
 use Illuminate\Support\Facades\Route;
@@ -32,6 +33,14 @@ Route::get("aircrafts/edit/{aircraft}", [AircraftController::class, "edit"])->na
 Route::post("/aircrafts/add", [AircraftController::class, "store"])->name("aircrafts.store");
 Route::put("aircrafts/edit/{aircraft}", [AircraftController::class, "update"])->name("aircrafts.update");
 Route::delete("aircrafts/delete/{aircraft}", [AircraftController::class,"destroy"])->name("aircrafts.destroy");
+
+
+Route::get("/services", [ServiceController::class, "index"])->name("services.index");
+Route::get("/services/add", [ServiceController::class, "add"])->name("services.add");
+Route::get("services/edit/{service}", [ServiceController::class, "edit"])->name("services.edit");
+Route::post("/services/add", [ServiceController::class, "store"])->name("services.store");
+Route::put("services/edit/{service}", [ServiceController::class, "update"])->name("services.update");
+Route::delete("services/delete/{service}", [ServiceController::class,"destroy"])->name("services.destroy");
 
 //####################### FAN #####################
 

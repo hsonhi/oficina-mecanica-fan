@@ -1,5 +1,4 @@
 import { Form, Head } from "@inertiajs/react";
-import MaterialsController from "@/actions/App/Http/Controllers";
 import Heading from "@/components/heading";
 import InputError from "@/components/input-error";
 import { Button } from "@/components/ui/button";

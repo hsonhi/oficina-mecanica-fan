@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\WelcomeUser;
 use App\Models\Material;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Mail;
 
 class MaterialsController extends Controller
 {
@@ -48,6 +50,9 @@ class MaterialsController extends Controller
         ]);
 
         $material = Material::create($validated);
+
+         //Mail::to($request->user())->send(new WelcomeUser($request->user()));
+         //Mail::to('heraldosonhi@gmail.com')->send(new WelcomeUser($request->user()));
 
         Inertia::flash("toast", ["type" => "success", "message" => __("Material registado com successo")]);
         return to_route("materials.index", ["materials" => $material->id]);

@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-#[Fillable(["nome", "descricao", "valor"])]
+
 class Material extends Model
 {
     // Explicitly define the database table name

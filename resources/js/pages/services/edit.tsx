@@ -8,6 +8,7 @@ import { index as materials, update } from "@/routes/materials";
 import type { Material } from "@/types/fan";
 import { Textarea } from "@/components/ui/textarea";
 import { Save } from "lucide-react";
+import MaterialsController from "@/actions/App/Http/Controllers";
 
 type Props = {
     material: Material;

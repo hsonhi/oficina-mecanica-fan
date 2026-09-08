@@ -3,11 +3,11 @@ import {
     BookOpen,
     FolderGit2,
     LayoutGrid,
+    ShieldUser,
     Users,
-    UserRoundCog,
-    Plane,
+    Helicopter,
     Wrench,
-    Boxes,
+    Cog,
     ChartNoAxesColumn,
 } from "lucide-react";
 import AppLogo from "@/components/app-logo";
@@ -28,6 +28,7 @@ import { dashboard } from "@/routes";
 import { index as mechanics } from "@/routes/mechanics";
 import { index as materials } from "@/routes/materials";
 import { index as aircrafts } from "@/routes/aircrafts";
+import { index as services } from "@/routes/services";
 import type { NavItem } from "@/types";
 
 export function AppSidebar() {
@@ -45,26 +46,26 @@ export function AppSidebar() {
         {
             title: "Usuários",
             href: "",
-            icon: Users,
+            icon: ShieldUser,
         },
         {
             title: "Mecânicos",
             href: mechanics(),
-            icon: UserRoundCog,
+            icon: Users,
         },
         {
             title: "Aeronaves",
             href: aircrafts(),
-            icon: Plane,
+            icon: Helicopter,
         },
         {
             title: "Materiais",
             href: materials(),
-            icon: Boxes,
+            icon: Cog,
         },
         {
             title: "Serviços",
-            href: "",
+            href: services(),
             icon: Wrench,
         },
     ];
