@@ -40,24 +40,33 @@ class ServiceController extends Controller
                 ->paginate(10)
                 ->withQueryString(),
             'filters' => $request->only(['search']),
-
-            //'services' => Service::with('mechanics:id,nome')->get(),
         ]);
 
     }
 
     public function add()
     {
-         return Inertia::render('services/add', [
+        return Inertia::render('services/add', [
         'mechanics' => Mechanic::all(),
         'materials' => Material::all(),
         'aircrafts' => Aircraft::all(),
     ]);
     }
 
-    public function edit(Aircraft $aircraft)
+    public function edit(Service $service)
     {
-        return Inertia::render("services/edit", ["aircraft" => $aircraft]);
+        return Inertia::render('services/edit', [
+        'service' => $service::
+        with('aircrafts:id,chassi,marca,modelo')
+        ->with('mechanics:id')   
+        ->with('materials:id')
+        ->where('id', $service->id)->get(),
+        
+        'mechanics' => Mechanic::all(),
+        'materials' => Material::all(),
+        'aircrafts' => Aircraft::all(),
+    ]);
+
     }
 
     public function store(Request $request): RedirectResponse
@@ -65,7 +74,7 @@ class ServiceController extends Controller
         $validated = $request->validate([
             "aeronave_id" => ["required", "numeric", "min:0"],
             "data_inicio" => ["required", "date"],
-            "data_fim" => ["required", "date"],
+            'data_fim'   => ['required', 'date', 'after:data_inicio'],
             "descricao" => ["required", "string"],
           
             'mecanicos_id' => ["required","array"],       // Must be sent as an array
@@ -92,25 +101,34 @@ class ServiceController extends Controller
         return to_route("services.index", ["services" => $service->id]);
     }
 
-    public function update(Request $request,Aircraft $aircraft): RedirectResponse {
+    public function update(Request $request,Service $service): RedirectResponse {
         
         $validated = $request->validate([
-            "chassi" => ["required", "string", "max:64"],
-            "ano" => ["required", "numeric", "min:0"],
-            "marca" => ["required", "string", "max:255"],
-            "modelo" => ["required", "string", "max:255"],
-            "cor" => ["required", "string", "max:64"],
+            "aeronave_id" => ["required", "numeric", "min:0"],
+            "data_inicio" => ["required", "date"],
+            'data_fim'   => ['required', 'date', 'after:data_inicio'],
+            "descricao" => ["required", "string"],
+          
+            'mecanicos_id' => ["required","array"],       
+            'mecanicos_id.*' => 'exists:_mecanicos,id',  
+
+            'material_id' => ["required","array"],      
+            'material_id.*' => 'exists:_material,id',    
         ]);
 
-        $aircraft = Aircraft::whereKey($aircraft->id)
+        $service = Service::whereKey($service->id)
             ->lockForUpdate()
             ->firstOrFail();
 
-        $aircraft->update($validated);
+        $service->update($validated);
+       
+        $service->mechanics()->sync($validated['mecanicos_id']);
+        $service->materials()->sync($validated['material_id']);
 
-        Inertia::flash("toast", ["type" => "success", "message" => __("Aeronave atualizada com successo"),]);
-        return to_route("aircrafts.index", ["aircrafts" => $aircraft->id]);
+        Inertia::flash("toast", ["type" => "success", "message" => __("Serviço atualizado com successo")]);
+        return to_route("services.index", ["services" => $service->id]);
     }
+    
 
     public function destroy(Request $request,Service $service): RedirectResponse {
 

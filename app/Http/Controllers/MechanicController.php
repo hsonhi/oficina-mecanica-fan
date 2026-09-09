@@ -19,7 +19,7 @@ class MechanicController extends Controller
                     $query->where('nome', 'like', "%{$search}%")
                           ->orWhere('telefone', 'like', "%{$search}%");
                 })
-                ->orderBy("id", "desc")
+                ->orderBy("nome", "asc")
                 ->paginate(10)
                 ->withQueryString(),
             'filters' => $request->only(['search']),

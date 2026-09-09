@@ -1,15 +1,15 @@
-import { Form, Head, usePage } from '@inertiajs/react';
-import { Link } from '@inertiajs/react';
-import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileController';
-import DeleteUser from '@/components/delete-user';
-import Heading from '@/components/heading';
-import InputError from '@/components/input-error';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { edit } from '@/routes/profile';
-import type { Auth } from '@/types';
-import { send } from '@/routes/verification';
+import { Form, Head, usePage } from "@inertiajs/react";
+import { Link } from "@inertiajs/react";
+import ProfileController from "@/actions/App/Http/Controllers/Settings/ProfileController";
+import DeleteUser from "@/components/delete-user";
+import Heading from "@/components/heading";
+import InputError from "@/components/input-error";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { edit } from "@/routes/profile";
+import type { Auth } from "@/types";
+import { send } from "@/routes/verification";
 
 type PageProps = {
     auth: Auth;
@@ -26,15 +26,15 @@ export default function Profile({
 
     return (
         <>
-            <Head title="Profile settings" />
+            <Head title="Definições de perfil" />
 
-            <h1 className="sr-only">Profile settings</h1>
+            <h1 className="sr-only">Definições de perfil</h1>
 
             <div className="space-y-6">
                 <Heading
                     variant="small"
-                    title="Profile"
-                    description="Update your name and email address"
+                    title="Perfil"
+                    description="Atualize o seu nome e endereço de email"
                 />
 
                 <Form
@@ -47,7 +47,7 @@ export default function Profile({
                     {({ processing, errors }) => (
                         <>
                             <div className="grid gap-2">
-                                <Label htmlFor="name">Name</Label>
+                                <Label htmlFor="name">Nome</Label>
 
                                 <Input
                                     id="name"
@@ -56,7 +56,7 @@ export default function Profile({
                                     name="name"
                                     required
                                     autoComplete="name"
-                                    placeholder="Full name"
+                                    placeholder="Nome completo"
                                 />
 
                                 <InputError
@@ -66,7 +66,7 @@ export default function Profile({
                             </div>
 
                             <div className="grid gap-2">
-                                <Label htmlFor="email">Email address</Label>
+                                <Label htmlFor="email">Endereço de email</Label>
 
                                 <Input
                                     id="email"
@@ -76,7 +76,7 @@ export default function Profile({
                                     name="email"
                                     required
                                     autoComplete="username"
-                                    placeholder="Email address"
+                                    placeholder="Endereço de email"
                                 />
 
                                 <InputError
@@ -89,7 +89,7 @@ export default function Profile({
                                 auth.user.email_verified_at === null && (
                                     <div>
                                         <p className="text-muted-foreground -mt-4 text-sm">
-                                            Your email address is unverified.{' '}
+                                            Your email address is unverified.{" "}
                                             <Link
                                                 href={send()}
                                                 as="button"
@@ -101,7 +101,7 @@ export default function Profile({
                                         </p>
 
                                         {status ===
-                                            'verification-link-sent' && (
+                                            "verification-link-sent" && (
                                             <div className="mt-2 text-sm font-medium text-green-600">
                                                 A new verification link has been
                                                 sent to your email address.
@@ -115,7 +115,7 @@ export default function Profile({
                                     disabled={processing}
                                     data-test="update-profile-button"
                                 >
-                                    Save
+                                    Guardar
                                 </Button>
                             </div>
                         </>
@@ -131,7 +131,7 @@ export default function Profile({
 Profile.layout = {
     breadcrumbs: [
         {
-            title: 'Profile settings',
+            title: "Definições de perfil",
             href: edit(),
         },
     ],

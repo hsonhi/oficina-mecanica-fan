@@ -20,7 +20,7 @@ class AircraftController extends Controller
                           ->orWhere('marca', 'like', "%{$search}%")
                           ->orWhere('modelo', 'like', "%{$search}%");
                 })
-                ->orderBy("id", "desc")
+                ->orderBy("ano", "desc")
                 ->paginate(10)
                 ->withQueryString(),
             'filters' => $request->only(['search']),

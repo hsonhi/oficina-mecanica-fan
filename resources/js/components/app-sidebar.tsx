@@ -29,6 +29,7 @@ import { index as mechanics } from "@/routes/mechanics";
 import { index as materials } from "@/routes/materials";
 import { index as aircrafts } from "@/routes/aircrafts";
 import { index as services } from "@/routes/services";
+import { index as users } from "@/routes/users";
 import type { NavItem } from "@/types";
 
 export function AppSidebar() {
@@ -39,13 +40,13 @@ export function AppSidebar() {
 
     const mainNavItems: NavItem[] = [
         {
-            title: "Início",
+            title: "Visão geral",
             href: dashboardUrl,
             icon: ChartNoAxesColumn,
         },
         {
             title: "Usuários",
-            href: "",
+            href: users(),
             icon: ShieldUser,
         },
         {

@@ -25,7 +25,7 @@ class MaterialsController extends Controller
                     $query->where('nome', 'like', "%{$search}%")
                           ->orWhere('descricao', 'like', "%{$search}%");
                 })
-                ->orderBy("id", "desc")
+                ->orderBy("nome", "asc")
                 ->paginate(10)
                 ->withQueryString(),
             'filters' => $request->only(['search']),

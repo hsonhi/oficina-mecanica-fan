@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import CreateMechanicModal from "@/components/create-mechanic-modal";
 import EditMechanicModal from "@/components/edit-mechanic-modal";
 import DeleteMechanicModal from "@/components/delete-mechanic-modal";
-import { useState, useEffect } from "react";
+import { useState, useEffect, FormEvent } from "react";
 import {
     Tooltip,
     TooltipContent,
@@ -18,7 +18,7 @@ import {
     edit as editmaterial,
 } from "@/routes/materials";
 import type { Mechanic } from "@/types/fan";
-import { Trash, Pencil, Plus } from "lucide-react";
+import { Search, Trash, Pencil, Plus } from "lucide-react";
 
 type Props = {
     mechanics: any;
@@ -48,7 +48,9 @@ export default function Mechanics({ mechanics, filters }: Props) {
     };
 
     const [search, setSearch] = useState(filters.search || "");
-    useEffect(() => {
+
+    const handleSearch = (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
         router.get(
             "/mechanics",
             { search },
@@ -57,7 +59,7 @@ export default function Mechanics({ mechanics, filters }: Props) {
                 replace: true,
             },
         );
-    }, [search]);
+    };
 
     return (
         <>
@@ -77,13 +79,26 @@ export default function Mechanics({ mechanics, filters }: Props) {
                             <Plus /> Adicionar mecânico
                         </Button>
                     </CreateMechanicModal>
-                    <Input
-                        type="search"
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
-                        placeholder="Pesquisar..."
-                        className="px-3 py-1.5 w-64"
-                    />
+                    <form
+                        onSubmit={handleSearch}
+                        className="flex w-full max-w-md items-center gap-2"
+                    >
+                        <Input
+                            type="search"
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                            placeholder="Pesquisar..."
+
+                            className="flex-1 px-3 py-1.5 w-44"
+                        />
+                        <Button
+                            type="submit"
+                            size="icon"
+                            aria-label="Pesquisar"
+                        >
+                            <Search />
+                        </Button>
+                    </form>
                 </div>
 
                 <div className="overflow-x-auto rounded-lg border bg-card shadow-sm">

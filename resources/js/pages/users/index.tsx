@@ -1,51 +1,45 @@
-import { Head, Link, router } from "@inertiajs/react";
+import { Head, Link, router, usePage } from "@inertiajs/react";
 import Heading from "@/components/heading";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { FormEvent, useState } from "react";
+import { useState, useEffect, FormEvent } from "react";
+import { Badge } from "@/components/ui/badge";
 import {
     Tooltip,
     TooltipContent,
     TooltipTrigger,
 } from "@/components/ui/tooltip";
 import {
-    index as materials,
-    add as addmaterial,
-    edit as editmaterial,
-} from "@/routes/materials";
-import type { Material } from "@/types/fan";
-import { Search, Trash, Pencil, Plus } from "lucide-react";
-import DeleteMaterialModal from "@/components/delete-material-modal";
+    index as users,
+    add as adduser,
+    edit as edituser,
+} from "@/routes/users";
+import type { User } from "@/types";
+import { Search, Trash, Pencil, Plus, KeyRound, UserKey } from "lucide-react";
+import DeleteUserModal from "@/components/delete-user-modal";
 
 type Props = {
-    materials: any;
+    users: any;
     filters: any;
 };
 
-export default function Materials({ materials, filters }: Props) {
-    // 🔍 This hooks directly into Inertia's global store to grab all active props
-    //const { props } = usePage();
-    // Print this out in your browser console (F12) to see what keys exist!
-    //console.log("All incoming props from Laravel:", materials /* props */);
+export default function Users({ users, filters }: Props) {
+    const [deleteUserDialogOpen, setDeleteUserDialogOpen] = useState(false);
 
-    const [deleteMaterialDialogOpen, setDeleteMaterialDialogOpen] =
-        useState(false);
+    const [userToDelete, setUserToDelete] = useState<User | null>(null);
 
-    const [materialToDelete, setMaterialToDelete] = useState<Material | null>(
-        null,
-    );
-
-    const confirmDeleteMaterial = (material: Material) => {
-        setMaterialToDelete(material);
-        setDeleteMaterialDialogOpen(true);
+    const confirmDeleteUser = (user: User) => {
+        setUserToDelete(user);
+        setDeleteUserDialogOpen(true);
     };
+    const { props } = usePage();
 
     const [search, setSearch] = useState(filters.search || "");
 
     const handleSearch = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         router.get(
-            "/materials",
+            "/users",
             { search },
             {
                 preserveState: true,
@@ -56,25 +50,24 @@ export default function Materials({ materials, filters }: Props) {
 
     return (
         <>
-            <Head title="Materiais" />
+            <Head title="Usuários" />
 
             <div className="mx-auto p-6">
                 <div className="flex items-center justify-between">
                     <Heading
-                        title="Materiais"
-                        description="Registo de materiais"
+                        title="Usuários"
+                        description="Registo de usuários"
                     />
                 </div>
 
                 <div className="flex justify-between items-center mb-4">
                     <Link
                         className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground shadow-xs hover:bg-primary/90  px-4 py-2 has-[>svg]:px-3"
-                        href={addmaterial()}
+                        href={adduser()}
                         prefetch
                     >
-                        <Plus /> Registar novo material
+                        <Plus /> Registar usuário
                     </Link>
-
                     <form
                         onSubmit={handleSearch}
                         className="flex w-full max-w-md items-center gap-2"
@@ -105,10 +98,19 @@ export default function Materials({ materials, filters }: Props) {
                                     Nome
                                 </th>
                                 <th className="px-6 py-3 text-left text-xs font-medium uppercase text-muted-foreground">
-                                    Preço
+                                    Patente
                                 </th>
                                 <th className="px-6 py-3 text-left text-xs font-medium uppercase text-muted-foreground">
-                                    Descrição
+                                    Telefone
+                                </th>
+                                <th className="px-6 py-3 text-left text-xs font-medium uppercase text-muted-foreground">
+                                    Email
+                                </th>
+                                <th className="px-6 py-3 text-left text-xs font-medium uppercase text-muted-foreground">
+                                    NIF
+                                </th>
+                                <th className="px-6 py-3 text-left text-xs font-medium uppercase text-muted-foreground">
+                                    Acesso
                                 </th>
                                 <th className="px-6 py-3 text-left text-xs font-medium uppercase text-muted-foreground">
                                     Ações
@@ -116,19 +118,33 @@ export default function Materials({ materials, filters }: Props) {
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-border">
-                            {materials.data.map((mat: any) => (
+                            {users.data.map((mat: any) => (
                                 <tr
                                     key={mat.id}
                                     className="transition-colors hover:bg-accent/50"
                                 >
                                     <td className="px-6 py-4 text-sm font-medium">
-                                        {mat.nome}
+                                        {mat.name}
                                     </td>
                                     <td className="px-6 py-4 text-sm text-muted-foreground">
-                                        {mat.valor} AKZ
+                                        {mat.patent}
                                     </td>
                                     <td className="px-6 py-4 text-sm text-muted-foreground">
-                                        {mat.descricao}
+                                        {mat.phone}
+                                    </td>
+                                    <td className="px-6 py-4 text-sm text-muted-foreground">
+                                        {mat.email}
+                                    </td>
+                                    <td className="px-6 py-4 text-sm text-muted-foreground">
+                                        {mat.taxid}
+                                    </td>
+                                    <td className="px-6 py-4 text-sm text-muted-foreground">
+                                        {mat.teams[0].name ==
+                                        "Administrador" ? (
+                                            <KeyRound />
+                                        ) : (
+                                            <UserKey />
+                                        )}
                                     </td>
                                     <td>
                                         <Tooltip>
@@ -140,45 +156,48 @@ export default function Materials({ materials, filters }: Props) {
                                                     asChild
                                                 >
                                                     <Link
-                                                        href={editmaterial(
-                                                            mat.id,
-                                                        )}
+                                                        href={edituser(mat.id)}
                                                     >
                                                         <Pencil className="h-4 w-4" />
                                                     </Link>
                                                 </Button>
                                             </TooltipTrigger>
                                             <TooltipContent>
-                                                <p>Editar material</p>
+                                                <p>Editar usuário</p>
                                             </TooltipContent>
                                         </Tooltip>
 
-                                        <Tooltip>
-                                            <TooltipTrigger asChild>
-                                                <Button
-                                                    variant="ghost"
-                                                    size="sm"
-                                                    data-test="team-edit-button"
-                                                    onClick={() =>
-                                                        confirmDeleteMaterial(
-                                                            mat,
-                                                        )
-                                                    }
-                                                >
-                                                    <Trash className="h-4 w-4" />
-                                                </Button>
-                                            </TooltipTrigger>
-                                            <TooltipContent>
-                                                <p>Remover material</p>
-                                            </TooltipContent>
-                                        </Tooltip>
+                                        {props.auth.user.id != mat.id &&
+                                        mat.id != 1 ? (
+                                            <Tooltip>
+                                                <TooltipTrigger asChild>
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        data-test="team-edit-button"
+                                                        onClick={() =>
+                                                            confirmDeleteUser(
+                                                                mat,
+                                                            )
+                                                        }
+                                                    >
+                                                        <Trash className="h-4 w-4" />
+                                                    </Button>
+                                                </TooltipTrigger>
+                                                <TooltipContent>
+                                                    <p>Remover usuário</p>
+                                                </TooltipContent>
+                                            </Tooltip>
+                                        ) : (
+                                            <span></span>
+                                        )}
                                     </td>
                                 </tr>
                             ))}
-                            {materials.data.length === 0 ? (
+                            {users.data.length === 0 ? (
                                 <tr>
                                     <td
-                                        colSpan={5}
+                                        colSpan={7}
                                         className="px-6 py-4 text-center text-sm text-muted-foreground"
                                     >
                                         Não foram encontrados registos
@@ -194,7 +213,7 @@ export default function Materials({ materials, filters }: Props) {
                 </p> */}
 
                 <div className="mt-4 flex gap-1 justify-center">
-                    {materials.links.map((link: any, index: number) => (
+                    {users.links.map((link: any, index: number) => (
                         <Link
                             key={index}
                             className={`rounded border border-border px-3 py-1 text-sm transition-colors ${
@@ -210,20 +229,20 @@ export default function Materials({ materials, filters }: Props) {
                 </div>
             </div>
 
-            <DeleteMaterialModal
-                material={materialToDelete}
-                open={deleteMaterialDialogOpen}
-                onOpenChange={setDeleteMaterialDialogOpen}
+            <DeleteUserModal
+                user={userToDelete}
+                open={deleteUserDialogOpen}
+                onOpenChange={setDeleteUserDialogOpen}
             />
         </>
     );
 }
 
-Materials.layout = {
+Users.layout = {
     breadcrumbs: [
         {
-            title: "Materiais",
-            href: materials(),
+            title: "Usuários",
+            href: users(),
         },
     ],
 };

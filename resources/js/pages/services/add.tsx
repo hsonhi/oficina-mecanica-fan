@@ -73,7 +73,7 @@ export default function AddService({ mechanics, materials, aircrafts }: Props) {
                                     <Label htmlFor="aeronave_id">
                                         Aeronave
                                     </Label>
-                                    <Select name="aeronave_id">
+                                    <Select name="aeronave_id" required>
                                         <SelectTrigger className="w-full">
                                             <SelectValue placeholder="Selecionar a aeronave" />
                                         </SelectTrigger>

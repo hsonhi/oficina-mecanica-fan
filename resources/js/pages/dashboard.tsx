@@ -1,9 +1,9 @@
-import { Head } from '@inertiajs/react';
-import { useState } from 'react';
-import PendingInvitationsModal from '@/components/pending-invitations-modal';
-import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
-import { dashboard } from '@/routes';
-import type { DashboardInvitation } from '@/types';
+import { Head } from "@inertiajs/react";
+import { useState } from "react";
+import PendingInvitationsModal from "@/components/pending-invitations-modal";
+import { PlaceholderPattern } from "@/components/ui/placeholder-pattern";
+import { dashboard } from "@/routes";
+import type { DashboardInvitation } from "@/types";
 
 type Props = {
     pendingInvitations?: DashboardInvitation[];
@@ -16,7 +16,7 @@ export default function Dashboard({ pendingInvitations = [] }: Props) {
 
     return (
         <>
-            <Head title="Dashboard" />
+            <Head title="Visão geral" />
             <PendingInvitationsModal
                 invitations={pendingInvitations}
                 open={pendingInvitations.length > 0 && showInvitations}
@@ -45,8 +45,8 @@ export default function Dashboard({ pendingInvitations = [] }: Props) {
 Dashboard.layout = (props: { currentTeam?: { slug: string } | null }) => ({
     breadcrumbs: [
         {
-            title: 'Dashboard',
-            href: props.currentTeam ? dashboard(props.currentTeam.slug) : '/',
+            title: "Visão geral",
+            href: props.currentTeam ? dashboard(props.currentTeam.slug) : "/",
         },
     ],
 });

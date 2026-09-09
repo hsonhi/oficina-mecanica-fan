@@ -5,11 +5,15 @@ use App\Http\Controllers\MaterialsController;
 use App\Http\Controllers\MechanicController;
 use App\Http\Controllers\AircraftController;
 use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\Teams\TeamInvitationController;
 use App\Http\Middleware\EnsureTeamMembership;
 use Illuminate\Support\Facades\Route;
 
-Route::inertia("/", "welcome")->name("home");
+//Route::inertia("/", "welcome")->name("home");
+Route::get('/', function () {
+    return redirect()->route('login');
+})->name('home'); 
 
 //####################### FAN #####################
 
@@ -42,6 +46,13 @@ Route::post("/services/add", [ServiceController::class, "store"])->name("service
 Route::put("services/edit/{service}", [ServiceController::class, "update"])->name("services.update");
 Route::delete("services/delete/{service}", [ServiceController::class,"destroy"])->name("services.destroy");
 
+
+Route::get("/users", [UserController::class, "index"])->name("users.index");
+Route::get("/users/add", [UserController::class, "add"])->name("users.add");
+Route::get("users/edit/{user}", [UserController::class, "edit"])->name("users.edit");
+Route::post("/users/add", [UserController::class, "store"])->name("users.store");
+Route::put("users/edit/{user}", [UserController::class, "update"])->name("users.update");
+Route::delete("users/delete/{user}", [UserController::class,"destroy"])->name("users.destroy");
 //####################### FAN #####################
 
 Route::prefix("{current_team}")

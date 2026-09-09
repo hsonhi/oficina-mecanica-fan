@@ -1,18 +1,18 @@
 // Components
-import { Form, Head } from '@inertiajs/react';
-import { LoaderCircle } from 'lucide-react';
-import InputError from '@/components/input-error';
-import TextLink from '@/components/text-link';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { login } from '@/routes';
-import { email } from '@/routes/password';
+import { Form, Head } from "@inertiajs/react";
+import { LoaderCircle } from "lucide-react";
+import InputError from "@/components/input-error";
+import TextLink from "@/components/text-link";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { login } from "@/routes";
+import { email } from "@/routes/password";
 
 export default function ForgotPassword({ status }: { status?: string }) {
     return (
         <>
-            <Head title="Forgot password" />
+            <Head title="Recuperar palavra-passe" />
 
             {status && (
                 <div className="mb-4 text-center text-sm font-medium text-green-600">
@@ -25,14 +25,16 @@ export default function ForgotPassword({ status }: { status?: string }) {
                     {({ processing, errors }) => (
                         <>
                             <div className="grid gap-2">
-                                <Label htmlFor="email">Email address</Label>
+                                <Label htmlFor="email">
+                                    Email de utilizador
+                                </Label>
                                 <Input
                                     id="email"
                                     type="email"
                                     name="email"
                                     autoComplete="off"
                                     autoFocus
-                                    placeholder="email@example.com"
+                                    placeholder="Email de utilizador"
                                 />
 
                                 <InputError message={errors.email} />
@@ -47,7 +49,7 @@ export default function ForgotPassword({ status }: { status?: string }) {
                                     {processing && (
                                         <LoaderCircle className="h-4 w-4 animate-spin" />
                                     )}
-                                    Email password reset link
+                                    Enviar link
                                 </Button>
                             </div>
                         </>
@@ -55,8 +57,8 @@ export default function ForgotPassword({ status }: { status?: string }) {
                 </Form>
 
                 <div className="text-muted-foreground space-x-1 text-center text-sm">
-                    <span>Or, return to</span>
-                    <TextLink href={login()}>log in</TextLink>
+                    <span>Ou, retorne para</span>
+                    <TextLink href={login()}>iniciar sessão</TextLink>
                 </div>
             </div>
         </>
@@ -64,6 +66,7 @@ export default function ForgotPassword({ status }: { status?: string }) {
 }
 
 ForgotPassword.layout = {
-    title: 'Forgot password',
-    description: 'Enter your email to receive a password reset link',
+    title: "Recuperar palavra-passe",
+    description:
+        "Insira o email associado a sua conta para receber o link de recuperação da palavra-passe",
 };

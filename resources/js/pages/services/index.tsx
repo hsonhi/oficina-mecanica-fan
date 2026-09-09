@@ -2,7 +2,8 @@ import { Head, Link, router, usePage } from "@inertiajs/react";
 import Heading from "@/components/heading";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useState, useEffect } from "react";
+import { Badge } from "@/components/ui/badge";
+import { useState, useEffect, FormEvent } from "react";
 import {
     Tooltip,
     TooltipContent,
@@ -14,7 +15,16 @@ import {
     edit as editservice,
 } from "@/routes/services";
 import type { Service } from "@/types/fan";
-import { Trash, Pencil, Plus, Calendar, Cog, Users, Eye } from "lucide-react";
+import {
+    Search,
+    Trash,
+    Pencil,
+    Plus,
+    Calendar,
+    Cog,
+    Users,
+    Eye,
+} from "lucide-react";
 import DeleteServiceModal from "@/components/delete-service-modal";
 
 type Props = {
@@ -23,11 +33,6 @@ type Props = {
 };
 
 export default function Materials({ services, filters }: Props) {
-    // 🔍 This hooks directly into Inertia's global store to grab all active props
-    const { props } = usePage();
-    // Print this out in your browser console (F12) to see what keys exist!
-    console.log("All incoming props from Laravel:", props /* props */);
-
     const [deleteServiceDialogOpen, setDeleteServiceDialogOpen] =
         useState(false);
 
@@ -40,8 +45,26 @@ export default function Materials({ services, filters }: Props) {
         setDeleteServiceDialogOpen(true);
     };
 
+    // Validate status
+    const today = new Date();
+    const isTodayBetweenDates = (current: any, start: any, end: any) => {
+        return (
+            current.getTime() >= start.getTime() &&
+            current.getTime() <= end.getTime()
+        );
+    };
+
+    const formatDate = (date: any) => {
+        const day = String(date.getDate()).padStart(2, "0");
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const year = date.getFullYear();
+        return `${day}/${month}/${year}`;
+    };
+
     const [search, setSearch] = useState(filters.search || "");
-    useEffect(() => {
+
+    const handleSearch = (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
         router.get(
             "/services",
             { search },
@@ -50,7 +73,7 @@ export default function Materials({ services, filters }: Props) {
                 replace: true,
             },
         );
-    }, [search]);
+    };
 
     return (
         <>
@@ -72,13 +95,26 @@ export default function Materials({ services, filters }: Props) {
                     >
                         <Plus /> Registar serviço
                     </Link>
-                    <Input
-                        type="search"
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
-                        placeholder="Pesquisar..."
-                        className="px-3 py-1.5 w-64"
-                    />
+                    <form
+                        onSubmit={handleSearch}
+                        className="flex w-full max-w-md items-center gap-2"
+                    >
+                        <Input
+                            type="search"
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                            placeholder="Pesquisar..."
+
+                            className="flex-1 px-3 py-1.5 w-44"
+                        />
+                        <Button
+                            type="submit"
+                            size="icon"
+                            aria-label="Pesquisar"
+                        >
+                            <Search />
+                        </Button>
+                    </form>
                 </div>
 
                 <div className="overflow-x-auto rounded-lg border bg-card shadow-sm">
@@ -121,8 +157,13 @@ export default function Materials({ services, filters }: Props) {
                                         <div className="flex items-center space-x-2">
                                             <Calendar className="text-sm" />
                                             <span className="">
-                                                {mat.data_inicio} -{" "}
-                                                {mat.data_fim}
+                                                {formatDate(
+                                                    new Date(mat.data_inicio),
+                                                )}{" "}
+                                                -{" "}
+                                                {formatDate(
+                                                    new Date(mat.data_fim),
+                                                )}
                                             </span>
                                         </div>
                                     </td>
@@ -151,7 +192,19 @@ export default function Materials({ services, filters }: Props) {
                                         </div>
                                     </td>
                                     <td className="px-6 py-4 text-sm text-muted-foreground">
-                                        {mat.descricao}
+                                        {isTodayBetweenDates(
+                                            today,
+                                            new Date(mat.data_inicio),
+                                            new Date(mat.data_fim),
+                                        ) ? (
+                                            <Badge variant="outline">
+                                                Em manutenção
+                                            </Badge>
+                                        ) : (
+                                            <Badge variant="outline">
+                                                Concluido
+                                            </Badge>
+                                        )}
                                     </td>
                                     <td>
                                         <Tooltip>
@@ -223,7 +276,7 @@ export default function Materials({ services, filters }: Props) {
                             {services.data.length === 0 ? (
                                 <tr>
                                     <td
-                                        colSpan={5}
+                                        colSpan={6}
                                         className="px-6 py-4 text-center text-sm text-muted-foreground"
                                     >
                                         Não foram encontrados registos
