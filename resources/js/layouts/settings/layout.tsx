@@ -22,11 +22,11 @@ const sidebarNavItems: NavItem[] = [
         href: editSecurity(),
         icon: null,
     },
-    {
+    /*{
         title: "Equipas",
         href: teams(),
         icon: null,
-    },
+    },*/
     {
         title: "Tema",
         href: editAppearance(),

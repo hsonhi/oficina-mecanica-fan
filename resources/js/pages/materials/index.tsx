@@ -1,4 +1,4 @@
-import { Head, Link, router } from "@inertiajs/react";
+import { Head, Link, router, usePage } from "@inertiajs/react";
 import Heading from "@/components/heading";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -24,9 +24,9 @@ type Props = {
 
 export default function Materials({ materials, filters }: Props) {
     // 🔍 This hooks directly into Inertia's global store to grab all active props
-    //const { props } = usePage();
+    const { props } = usePage();
     // Print this out in your browser console (F12) to see what keys exist!
-    //console.log("All incoming props from Laravel:", materials /* props */);
+    console.log("All incoming props from Laravel:", props /* props */);
 
     const [deleteMaterialDialogOpen, setDeleteMaterialDialogOpen] =
         useState(false);

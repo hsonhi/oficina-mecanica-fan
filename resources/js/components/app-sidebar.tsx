@@ -38,7 +38,28 @@ export function AppSidebar() {
         ? dashboard(page.props.currentTeam.slug)
         : "/";
 
+    const { auth } = usePage().props;
+    const userRole = auth.user?.role;
+
     const mainNavItems: NavItem[] = [
+        {
+            title: "Visão geral",
+            href: dashboardUrl,
+            icon: ChartNoAxesColumn,
+        },
+        {
+            title: "Materiais",
+            href: materials(),
+            icon: Cog,
+        },
+        {
+            title: "Serviços",
+            href: services(),
+            icon: Wrench,
+        },
+    ];
+
+    const mainNavItemsAdmin: NavItem[] = [
         {
             title: "Visão geral",
             href: dashboardUrl,
@@ -104,7 +125,12 @@ export function AppSidebar() {
             </SidebarHeader>
 
             <SidebarContent>
-                <NavMain items={mainNavItems} />
+                {userRole === "administrador" && (
+                    <NavMain items={mainNavItemsAdmin} />
+                )}
+                {userRole != "administrador" && (
+                    <NavMain items={mainNavItems} />
+                )}
             </SidebarContent>
 
             <SidebarFooter>

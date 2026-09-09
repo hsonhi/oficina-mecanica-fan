@@ -75,6 +75,7 @@ export default function Materials({ services, filters }: Props) {
         );
     };
 
+    console.log(services);
     return (
         <>
             <Head title="Serviços" />

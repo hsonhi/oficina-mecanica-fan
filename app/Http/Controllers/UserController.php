@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Password;
 
 class UserController extends Controller
 {
@@ -48,11 +49,12 @@ class UserController extends Controller
             "phone" => ["required", "numeric", "min:0"],
             "patent" => ["nullable", "string"],
             "taxid" =>  ["nullable", "string"],
-            "password" =>  ["required", "string"],
+            "password" =>   ['required', 'string', Password::default()],
             "current_team_id" => ["required", "numeric", "min:0"],
         ]);
 
-        $user = User::create(array_merge($validated, ['password' => Hash::make($validated['password'])]));
+        $role = Team::where('id', $validated['current_team_id'])->value('slug'); 
+        $user = User::create(array_merge($validated,['role' => $role], ['password' => Hash::make($validated['password'])]));
         
         // Sync many-to-many relations with extra fields
         $user->teams()->attach($validated['current_team_id'], ['role' => 'member',
@@ -78,7 +80,9 @@ class UserController extends Controller
             ->lockForUpdate()
             ->firstOrFail();
 
-        $user->update($validated);
+        $role = Team::where('id', $validated['current_team_id'])->value('slug'); 
+        $user->update(array_merge($validated,['role' => $role]));
+        //$user->update($validated);
         
         // Sync many-to-many relations with extra fields, remember the pivotValues
         $user->teams()->syncWithPivotValues($validated['current_team_id'], ['role' => 'member']);

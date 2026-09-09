@@ -48,6 +48,7 @@ class User extends Authenticatable
         "taxid",
         "password",
         "current_team_id",
+        "role",
     ];
 
     /**

@@ -30,8 +30,7 @@ export default function DeleteUser() {
                 <div className="relative space-y-0.5 text-red-600 dark:text-red-100">
                     <p className="font-medium">Aviso</p>
                     <p className="text-sm">
-                        Por favor, proceda com cautela; isso não pode ser
-                        desfeito.
+                        Por favor proceda com cautela, esta ação é irreversível.
                     </p>
                 </div>
 

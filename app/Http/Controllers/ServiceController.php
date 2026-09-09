@@ -26,16 +26,16 @@ class ServiceController extends Controller
         ])
         ->get();*/
 
+        $search = $request->input('search');
+
         return Inertia::render("services/index", [
             "services"=> Service::query()
-                ->when($request->input('search'), function ($query, $search) {
-                    $query->where('descricao', 'like', "%{$search}%");
-                         // ->orWhere('marca', 'like', "%{$search}%")
-                         // ->orWhere('modelo', 'like', "%{$search}%");
-                })
                 ->orderBy("id", "desc")
-                ->with('aircrafts:id,chassi,marca,modelo') // Using Eloquent relationships with the with() method
-                ->with('mechanics:id,nome')   // Many-to-many relations inside Service Model
+                ->with('aircrafts')
+                ->whereHas('aircrafts', function ($query) use ($search) {
+                       $query->where('chassi', 'LIKE', '%' . $search . '%');})
+
+                ->with('mechanics:id,nome')  
                 ->with('materials:id,nome')
                 ->paginate(10)
                 ->withQueryString(),
