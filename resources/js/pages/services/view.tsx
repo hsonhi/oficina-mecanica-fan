@@ -115,7 +115,7 @@ export default function EditService({ service }: Props) {
 
                     <div className="grid gap-6 p-6 md:grid-cols-3">
                         <div className="flex gap-2">
-                            <CalendarDays className="mt-0.5 size-5 text-muted-foreground" />
+                            <CalendarDays className="mt-0.5 size-5 text-primary" />
                             <div>
                                 <p className="text-sm font-medium">
                                     Período do serviço
@@ -127,7 +127,7 @@ export default function EditService({ service }: Props) {
                             </div>
                         </div>
                         <div className="flex gap-2">
-                            <User className="mt-0.5 size-5 text-muted-foreground" />
+                            <User className="mt-0.5 size-5 text-primary" />
                             <div>
                                 <p className="text-sm font-medium">Registo</p>
                                 <p className="mt-1 text-sm text-muted-foreground">
@@ -136,7 +136,7 @@ export default function EditService({ service }: Props) {
                             </div>
                         </div>
                         <div className="flex gap-2">
-                            <Wrench className="mt-0.5 size-5 text-muted-foreground" />
+                            <Wrench className="mt-0.5 size-5 text-primary" />
                             <div>
                                 <p className="text-sm font-medium">
                                     Referência do serviço
