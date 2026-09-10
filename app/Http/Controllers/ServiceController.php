@@ -34,7 +34,6 @@ class ServiceController extends Controller
                 ->with('aircrafts')
                 ->whereHas('aircrafts', function ($query) use ($search) {
                        $query->where('chassi', 'LIKE', '%' . $search . '%');})
-
                 ->with('mechanics:id,nome')  
                 ->with('materials:id,nome')
                 ->paginate(10)
@@ -62,6 +61,23 @@ class ServiceController extends Controller
         ->with('materials:id')
         ->where('id', $service->id)->get(),
         
+        'mechanics' => Mechanic::all(),
+        'materials' => Material::all(),
+        'aircrafts' => Aircraft::all(),
+    ]);
+
+    }
+
+    public function view(Service $service)
+    {
+        return Inertia::render('services/view', [
+        'service' => $service::
+        with('aircrafts:id,chassi,marca,modelo')
+        ->with('mechanics:id,nome')   
+        ->with('materials:id,nome')
+        ->with('user:id,name')
+        ->where('id', $service->id)->get(),
+
         'mechanics' => Mechanic::all(),
         'materials' => Material::all(),
         'aircrafts' => Aircraft::all(),

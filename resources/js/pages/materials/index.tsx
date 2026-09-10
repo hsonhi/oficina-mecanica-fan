@@ -125,7 +125,7 @@ export default function Materials({ materials, filters }: Props) {
                                         {mat.nome}
                                     </td>
                                     <td className="px-6 py-4 text-sm text-muted-foreground">
-                                        {mat.valor} AKZ
+                                        AKZ {mat.valor}
                                     </td>
                                     <td className="px-6 py-4 text-sm text-muted-foreground">
                                         {mat.descricao}

@@ -139,12 +139,11 @@ export default function Users({ users, filters }: Props) {
                                         {mat.taxid}
                                     </td>
                                     <td className="px-6 py-4 text-sm text-muted-foreground">
-                                        {/*mat.teams[0].name ==
-                                        "Administrador" ? (
+                                        {mat.role == "administrador" ? (
                                             <KeyRound />
                                         ) : (
                                             <UserKey />
-                                        ) */}
+                                        )}
                                     </td>
                                     <td>
                                         <Tooltip>

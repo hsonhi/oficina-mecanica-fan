@@ -11,12 +11,10 @@ use App\Http\Middleware\EnsureTeamMembership;
 use App\Http\Middleware\CheckRole;
 use Illuminate\Support\Facades\Route;
 
-//Route::inertia("/", "welcome")->name("home");
 Route::get('/', function () {
     return redirect()->route('login');
 })->name('home'); 
 
-//####################### FAN #####################
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get("/materials", [MaterialsController::class, "index"])->name("materials.index");
@@ -25,6 +23,24 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post("/materials/add", [MaterialsController::class, "store"])->name("materials.store");
     Route::put("materials/edit/{material}", [MaterialsController::class, "update"])->name("materials.update");
     Route::delete("materials/delete/{material}", [MaterialsController::class,"destroy"])->name("materials.destroy");
+
+    Route::get("/services", [ServiceController::class, "index"])->name("services.index");
+    Route::get("/services/add", [ServiceController::class, "add"])->name("services.add");
+    Route::get("services/edit/{service}", [ServiceController::class, "edit"])->name("services.edit");
+     Route::get("services/view/{service}", [ServiceController::class, "view"])->name("services.view");
+    Route::post("/services/add", [ServiceController::class, "store"])->name("services.store");
+    Route::put("services/edit/{service}", [ServiceController::class, "update"])->name("services.update");
+    Route::delete("services/delete/{service}", [ServiceController::class,"destroy"])->name("services.destroy");
+
+
+Route::middleware(['auth', 'role:administrador'])->group(function () {
+      
+    Route::get("/users", [UserController::class, "index"])->name("users.index");
+    Route::get("/users/add", [UserController::class, "add"])->name("users.add");
+    Route::get("users/edit/{user}", [UserController::class, "edit"])->name("users.edit");
+    Route::post("/users/add", [UserController::class, "store"])->name("users.store");
+    Route::put("users/edit/{user}", [UserController::class, "update"])->name("users.update");
+    Route::delete("users/delete/{user}", [UserController::class,"destroy"])->name("users.destroy");
 
     Route::get('/mechanics', [MechanicController::class, 'index'])->name('mechanics.index');
     Route::post("/mechanics/add", [MechanicController::class, "store"])->name("mechanics.store");
@@ -38,29 +54,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::put("aircrafts/edit/{aircraft}", [AircraftController::class, "update"])->name("aircrafts.update");
     Route::delete("aircrafts/delete/{aircraft}", [AircraftController::class,"destroy"])->name("aircrafts.destroy");
 
-    Route::get("/services", [ServiceController::class, "index"])->name("services.index");
-    Route::get("/services/add", [ServiceController::class, "add"])->name("services.add");
-    Route::get("services/edit/{service}", [ServiceController::class, "edit"])->name("services.edit");
-    Route::post("/services/add", [ServiceController::class, "store"])->name("services.store");
-    Route::put("services/edit/{service}", [ServiceController::class, "update"])->name("services.update");
-    Route::delete("services/delete/{service}", [ServiceController::class,"destroy"])->name("services.destroy");
-
-    
-
-Route::middleware(['auth', 'role:administrador'])->group(function () {
-      
-Route::get("/users", [UserController::class, "index"])->name("users.index");
-    Route::get("/users/add", [UserController::class, "add"])->name("users.add");
-    Route::get("users/edit/{user}", [UserController::class, "edit"])->name("users.edit");
-    Route::post("/users/add", [UserController::class, "store"])->name("users.store");
-    Route::put("users/edit/{user}", [UserController::class, "update"])->name("users.update");
-    Route::delete("users/delete/{user}", [UserController::class,"destroy"])->name("users.destroy");
-
     });
 });
 
-
-//####################### FAN #####################
 
 Route::prefix("{current_team}")
     ->middleware(["auth", "verified", EnsureTeamMembership::class])

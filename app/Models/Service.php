@@ -48,6 +48,11 @@ class Service extends Model
         return $this->HasMany(ServiceMaterial::class,'servico_id', 'id');
     }
 
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class,'user_id');
+    }
+
     protected function dataInicio(): Attribute
     {
         return Attribute::make(

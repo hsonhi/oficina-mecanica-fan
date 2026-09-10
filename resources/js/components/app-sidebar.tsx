@@ -5,7 +5,7 @@ import {
     LayoutGrid,
     ShieldUser,
     Users,
-    Helicopter,
+    Plane,
     Wrench,
     Cog,
     ChartNoAxesColumn,
@@ -78,7 +78,7 @@ export function AppSidebar() {
         {
             title: "Aeronaves",
             href: aircrafts(),
-            icon: Helicopter,
+            icon: Plane,
         },
         {
             title: "Materiais",

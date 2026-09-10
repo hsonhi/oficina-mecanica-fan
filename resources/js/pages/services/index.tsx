@@ -13,6 +13,7 @@ import {
     index as services,
     add as addservice,
     edit as editservice,
+    view as viewservice,
 } from "@/routes/services";
 import type { Service } from "@/types/fan";
 import {
@@ -193,19 +194,39 @@ export default function Materials({ services, filters }: Props) {
                                         </div>
                                     </td>
                                     <td className="px-6 py-4 text-sm text-muted-foreground">
-                                        {isTodayBetweenDates(
-                                            today,
-                                            new Date(mat.data_inicio),
-                                            new Date(mat.data_fim),
-                                        ) ? (
-                                            <Badge variant="outline">
-                                                Em manutenção
-                                            </Badge>
-                                        ) : (
-                                            <Badge variant="outline">
-                                                Concluido
-                                            </Badge>
-                                        )}
+                                        <Badge
+                                            variant="outline"
+                                            className={
+                                                isTodayBetweenDates(
+                                                    today,
+                                                    new Date(mat.data_inicio),
+                                                    new Date(mat.data_fim),
+                                                )
+                                                    ? "border-amber-500/50 text-amber-700 dark:text-amber-400"
+                                                    : "border-emerald-500/50 text-emerald-700 dark:text-emerald-400"
+                                            }
+                                        >
+                                            <span
+                                                className={
+                                                    isTodayBetweenDates(
+                                                        today,
+                                                        new Date(
+                                                            mat.data_inicio,
+                                                        ),
+                                                        new Date(mat.data_fim),
+                                                    )
+                                                        ? "size-1.5 rounded-full bg-amber-500"
+                                                        : "size-1.5 rounded-full bg-emerald-500"
+                                                }
+                                            />
+                                            {isTodayBetweenDates(
+                                                today,
+                                                new Date(mat.data_inicio),
+                                                new Date(mat.data_fim),
+                                            )
+                                                ? "Em manutenção"
+                                                : "Concluído"}
+                                        </Badge>
                                     </td>
                                     <td>
                                         <Tooltip>
@@ -217,7 +238,7 @@ export default function Materials({ services, filters }: Props) {
                                                     asChild
                                                 >
                                                     <Link
-                                                        href={editservice(
+                                                        href={viewservice(
                                                             mat.id,
                                                         )}
                                                     >
@@ -226,7 +247,7 @@ export default function Materials({ services, filters }: Props) {
                                                 </Button>
                                             </TooltipTrigger>
                                             <TooltipContent>
-                                                <p>Visualizar serviço</p>
+                                                <p>Ver detalhes do serviço</p>
                                             </TooltipContent>
                                         </Tooltip>
 
