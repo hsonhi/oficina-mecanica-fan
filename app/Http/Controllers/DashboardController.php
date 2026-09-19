@@ -17,24 +17,6 @@ class DashboardController extends Controller
     {
         $email = strtolower($request->user()->email);
 
-        $pendingInvitations = TeamInvitation::query()
-            ->with(['inviter', 'team'])
-            ->whereRaw('LOWER(email) = ?', [$email])
-            ->whereNull('accepted_at')
-            ->where(fn ($query) => $query
-                ->whereNull('expires_at')
-                ->orWhere('expires_at', '>=', now()))
-            ->latest()
-            ->get()
-            ->map(fn (TeamInvitation $invitation) => [
-                'code' => $invitation->code,
-                'inviterName' => $invitation->inviter->name,
-                'team' => [
-                    'name' => $invitation->team->name,
-                    'slug' => $invitation->team->slug,
-                ],
-            ]);
-
         $today = now()->toDateString();
         $services = Service::query();
 
@@ -54,7 +36,6 @@ class DashboardController extends Controller
             ]);
 
         return Inertia::render('dashboard', [
-            'pendingInvitations' => $pendingInvitations,
             'statistics' => [
                 'aircraft' => Aircraft::count(),
                 'services' => $services->count(),

@@ -8,7 +8,6 @@ import {
     Users,
     Wrench,
 } from "lucide-react";
-import PendingInvitationsModal from "@/components/pending-invitations-modal";
 import { Badge } from "@/components/ui/badge";
 import {
     Card,
@@ -19,10 +18,8 @@ import {
 } from "@/components/ui/card";
 import { index as servicesRoute } from "@/routes/services";
 import { dashboard } from "@/routes";
-import type { DashboardInvitation } from "@/types";
 
 type Props = {
-    pendingInvitations?: DashboardInvitation[];
     statistics: {
         aircraft: number;
         services: number;
@@ -45,13 +42,7 @@ const formatDate = (date: string) =>
         new Date(`${date}T00:00:00`),
     );
 
-export default function Dashboard({
-    pendingInvitations = [],
-    statistics,
-}: Props) {
-    const [showInvitations, setShowInvitations] = useState(
-        pendingInvitations.length > 0,
-    );
+export default function Dashboard({ statistics }: Props) {
     const metrics = [
         { label: "Serviços", value: statistics.services, icon: Wrench },
         { label: "Aeronaves", value: statistics.aircraft, icon: Plane },
@@ -62,11 +53,6 @@ export default function Dashboard({
     return (
         <>
             <Head title="Visão geral" />
-            <PendingInvitationsModal
-                invitations={pendingInvitations}
-                open={pendingInvitations.length > 0 && showInvitations}
-                onOpenChange={setShowInvitations}
-            />
             <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-6 p-4 md:p-6">
                 <div className="flex flex-col justify-between gap-2 md:flex-row md:items-end">
                     <div>
@@ -163,7 +149,7 @@ export default function Dashboard({
                         <CardHeader>
                             <CardTitle>Estado dos serviços</CardTitle>
                             <CardDescription>
-                                Atividade planeada e em curso.
+                                Actividade planeada e em curso.
                             </CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-6">
