@@ -173,7 +173,7 @@ export default function MultiSelect({
                     <ul className="p-1 overflow-y-auto max-h-48">
                         {filteredOptions.length === 0 ? (
                             <li className="text-muted-foreground px-3 py-4 text-center text-sm">
-                                No options found
+                                Não foram encontrados registos
                             </li>
                         ) : (
                             filteredOptions.map((option) => {

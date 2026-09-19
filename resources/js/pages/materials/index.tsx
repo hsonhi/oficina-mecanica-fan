@@ -3,6 +3,7 @@ import Heading from "@/components/heading";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { FormEvent, useState } from "react";
+import { formatCurrency } from "@/lib/utils";
 import {
     Tooltip,
     TooltipContent,
@@ -125,7 +126,7 @@ export default function Materials({ materials, filters }: Props) {
                                         {mat.nome}
                                     </td>
                                     <td className="px-6 py-4 text-sm text-muted-foreground">
-                                        AKZ {mat.valor}
+                                        {formatCurrency(mat.valor)}
                                     </td>
                                     <td className="px-6 py-4 text-sm text-muted-foreground">
                                         {mat.descricao}

@@ -12,6 +12,9 @@
     "passwords.token": "Este token de redefinição de palavra-passe é inválido.",
     "passwords.user": "Não conseguimos encontrar um utilizador com este endereço de email.",
 
+    "validation.unique": "Informação já encontra-se registada.",
+    "validation.required": "Campo de preenchimento obrigatório.",
+
     "Reset Password Notification": "Notificação de redefinição de senha",
     "You are receiving this email because we received a password reset request for your account.": "Está a receber este email porque recebemos um pedido de redefinição de palavra-passe para a sua conta.",
     "Reset Password": "Redefinir palavra-passe",

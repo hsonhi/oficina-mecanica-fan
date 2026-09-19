@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Mechanic;
+use App\Models\ServiceMechanic;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Validation\Rule;
 
 class MechanicController extends Controller
 {
@@ -30,7 +32,7 @@ class MechanicController extends Controller
     {
         $validated = $request->validate([
             "nome" => ["required", "string", "max:255"],
-            "telefone" => ["required", "numeric", "min:0"]
+            "telefone" => ["required", "numeric", "min:0",Rule::unique('_mecanicos', 'telefone')],
         ]);
 
         $mechanic = Mechanic::create($validated);
@@ -43,7 +45,7 @@ class MechanicController extends Controller
 
         $validated = $request->validate([
             "nome" => ["required", "string", "max:255"],
-            "telefone" => ["required", "numeric", "min:0"]
+            "telefone" => ["required", "numeric", "min:0",Rule::unique('_mecanicos', 'telefone')->ignore($mechanic->id)],
         ]);
 
         $mechanic = Mechanic::whereKey($mechanic->id)
@@ -57,6 +59,12 @@ class MechanicController extends Controller
     }
 
     public function destroy(Request $request,Mechanic $mechanic): RedirectResponse {
+
+        if (ServiceMechanic::where('mecanicos_id', $mechanic->id)->exists()) {
+        return back()->withErrors([
+            'custom_error' => 'Mecânico alocado em registo de serviço.'
+        ]);
+        }
 
         $mechanic->delete();
         Inertia::flash("toast", ["type" => "success","message" => __("Mecânico removido com successo")]);

@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Aircraft;
+use App\Models\Service;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Validation\Rule;
 
 class AircraftController extends Controller
 {
@@ -39,7 +41,7 @@ class AircraftController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            "chassi" => ["required", "string", "max:64"],
+            "chassi" => ["required", "string", "max:64", Rule::unique('_aeronaves', 'chassi')],
             "ano" => ["required", "numeric", "min:0"],
             "marca" => ["required", "string", "max:255"],
             "modelo" => ["required", "string", "max:255"],
@@ -55,7 +57,7 @@ class AircraftController extends Controller
     public function update(Request $request,Aircraft $aircraft): RedirectResponse {
         
         $validated = $request->validate([
-            "chassi" => ["required", "string", "max:64"],
+            "chassi" => ["required", "string", "max:64", Rule::unique('_aeronaves', 'chassi')->ignore($aircraft->id)],
             "ano" => ["required", "numeric", "min:0"],
             "marca" => ["required", "string", "max:255"],
             "modelo" => ["required", "string", "max:255"],
@@ -73,6 +75,12 @@ class AircraftController extends Controller
     }
 
     public function destroy(Request $request,Aircraft $aircraft): RedirectResponse {
+
+       if (Service::where('aeronave_id', $aircraft->id)->exists()) {
+        return back()->withErrors([
+            'custom_error' => 'Aeronave alocada em registo de serviço.'
+        ]);
+        }
 
         $aircraft->delete();
         Inertia::flash("toast", ["type" => "success","message" => __("Aeronave removida com successo")]);

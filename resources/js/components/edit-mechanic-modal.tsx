@@ -60,10 +60,23 @@ export default function EditMechanicModal({
                             <div className="grid gap-2">
                                 <Label htmlFor="telefone">Telefone</Label>
                                 <Input
+                                    type="text"
+                                    maxLength={9}
+                                    inputMode="numeric"
+                                    pattern="[0-9]*"
+                                    className="mt-1 block w-full"
                                     id="telefone"
-                                    type="number"
                                     name="telefone"
                                     required
+                                    autoComplete="phone"
+                                    placeholder=""
+                                    onChange={(e) => {
+                                        // Optional sanitization: removes non-digits if pasted
+                                        e.target.value = e.target.value.replace(
+                                            /\D/g,
+                                            "",
+                                        );
+                                    }}
                                     defaultValue={mechanic?.telefone}
                                 />
                                 <InputError

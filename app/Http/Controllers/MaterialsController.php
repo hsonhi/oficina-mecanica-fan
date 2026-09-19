@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Mail\WelcomeUser;
 use App\Models\Material;
+use App\Models\ServiceMaterial;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Validation\Rule;
 
 class MaterialsController extends Controller
 {
@@ -82,6 +84,13 @@ class MaterialsController extends Controller
     }
 
     public function destroy(Request $request,Material $material): RedirectResponse {
+
+     if (ServiceMaterial::where('material_id', $material->id)->exists()) {
+        return back()->withErrors([
+            'custom_error' => 'Material alocado em registo de serviço.'
+        ]);
+        }
+
 
         $material->delete();
         Inertia::flash("toast", ["type" => "success","message" => __("Material removido com successo")]);

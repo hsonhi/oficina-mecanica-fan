@@ -16,6 +16,14 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card";
 import { Save } from "lucide-react";
 import { Value } from "@radix-ui/react-select";
 
@@ -68,106 +76,121 @@ export default function AddService({ mechanics, materials, aircrafts }: Props) {
                 >
                     {({ processing, errors }) => (
                         <>
-                            <div className="flex flex-col md:flex-row gap-4">
-                                <div className="flex-1">
-                                    <Label htmlFor="aeronave_id">
-                                        Aeronave
-                                    </Label>
-                                    <Select name="aeronave_id" required>
-                                        <SelectTrigger className="w-full">
-                                            <SelectValue placeholder="Selecionar a aeronave" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            {aircrafts.map((role: any) => (
-                                                <SelectItem
-                                                    key={role.id}
-                                                    value={role.id.toString()}
-                                                >
-                                                    {role.chassi} {role.marca}{" "}
-                                                    {role.modelo}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-                                    <InputError
-                                        className="mt-2"
-                                        message={errors.aeronave_id}
-                                    />
-                                </div>
-                            </div>
+                            <Card>
+                                <CardHeader>
+                                    <CardTitle>Dados do serviço</CardTitle>
+                                    <CardDescription>
+                                        Preencha os dados principais para
+                                        registar o serviço.
+                                    </CardDescription>
+                                </CardHeader>
 
-                            <div className="flex flex-col md:flex-row gap-4">
-                                <div className="flex-1">
-                                    <Label htmlFor="data_inicio">
-                                        Data de Início
-                                    </Label>
-                                    <Input
-                                        type="date"
-                                        id="data_inicio"
-                                        className="mt-1 block w-full"
-                                        name="data_inicio"
-                                        required
-                                        autoComplete="data_inicio"
-                                        placeholder=""
-                                    />
-                                    <InputError
-                                        className="mt-2"
-                                        message={errors.data_inicio}
-                                    />
-                                </div>
+                                <CardContent className="space-y-6">
+                                    <div className="flex flex-col md:flex-row gap-4">
+                                        <div className="flex-1">
+                                            <Label htmlFor="aeronave_id">
+                                                Aeronave
+                                            </Label>
+                                            <Select name="aeronave_id" required>
+                                                <SelectTrigger className="w-full">
+                                                    <SelectValue placeholder="Selecionar a aeronave" />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    {aircrafts.map(
+                                                        (role: any) => (
+                                                            <SelectItem
+                                                                key={role.id}
+                                                                value={role.id.toString()}
+                                                            >
+                                                                {role.chassi}{" "}
+                                                                {role.marca}{" "}
+                                                                {role.modelo}
+                                                            </SelectItem>
+                                                        ),
+                                                    )}
+                                                </SelectContent>
+                                            </Select>
+                                            <InputError
+                                                className="mt-2"
+                                                message={errors.aeronave_id}
+                                            />
+                                        </div>
+                                    </div>
 
-                                <div className="flex-1">
-                                    <Label htmlFor="data_fim">
-                                        Data Provisória de Conclusão
-                                    </Label>
-                                    <Input
-                                        type="date"
-                                        id="data_fim"
-                                        className="mt-1 block w-full"
-                                        name="data_fim"
-                                        required
-                                        autoComplete="data_fim"
-                                        placeholder=""
-                                    />
-                                    <InputError
-                                        className="mt-2"
-                                        message={errors.data_fim}
-                                    />
-                                </div>
-                            </div>
+                                    <div className="flex flex-col md:flex-row gap-4">
+                                        <div className="flex-1">
+                                            <Label htmlFor="data_inicio">
+                                                Data de Início
+                                            </Label>
+                                            <Input
+                                                type="date"
+                                                id="data_inicio"
+                                                className="mt-1 block w-full"
+                                                name="data_inicio"
+                                                required
+                                                autoComplete="data_inicio"
+                                                placeholder=""
+                                            />
+                                            <InputError
+                                                className="mt-2"
+                                                message={errors.data_inicio}
+                                            />
+                                        </div>
 
-                            <div className="grid gap-2">
-                                <Label htmlFor="descricao">Descrição</Label>
+                                        <div className="flex-1">
+                                            <Label htmlFor="data_fim">
+                                                Data Provisória de Conclusão
+                                            </Label>
+                                            <Input
+                                                type="date"
+                                                id="data_fim"
+                                                className="mt-1 block w-full"
+                                                name="data_fim"
+                                                required
+                                                autoComplete="data_fim"
+                                                placeholder=""
+                                            />
+                                            <InputError
+                                                className="mt-2"
+                                                message={errors.data_fim}
+                                            />
+                                        </div>
+                                    </div>
 
-                                <Textarea
-                                    id="descricao"
-                                    rows={3}
-                                    className="mt-1 block w-full"
-                                    name="descricao"
-                                    required
-                                    autoComplete="descricao"
-                                    placeholder=""
-                                />
-                                <InputError
-                                    className="mt-2"
-                                    message={errors.descricao}
-                                />
-                            </div>
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="descricao">
+                                            Descrição
+                                        </Label>
 
-                            <div className="grid gap-2">
-                                <Label htmlFor="descricao">
-                                    Selecione os mecânicos para a atuação deste
-                                    serviço
-                                </Label>
+                                        <Textarea
+                                            id="descricao"
+                                            rows={3}
+                                            className="mt-1 block w-full"
+                                            name="descricao"
+                                            required
+                                            autoComplete="descricao"
+                                            placeholder=""
+                                        />
+                                        <InputError
+                                            className="mt-2"
+                                            message={errors.descricao}
+                                        />
+                                    </div>
 
-                                <MultiSelect
-                                    name="mecanicos_id[]"
-                                    options={mechanicOPTIONS}
-                                    selected={selectedMechanicValues}
-                                    onChange={setSelectedMechanicValues}
-                                />
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="descricao">
+                                            Selecione os mecânicos para a
+                                            atuação deste serviço
+                                        </Label>
 
-                                {/*<select
+                                        <MultiSelect
+                                            name="mecanicos_id[]"
+                                            options={mechanicOPTIONS}
+                                            selected={selectedMechanicValues}
+                                            onChange={setSelectedMechanicValues}
+                                        />
+
+                                        {/*<select
                                     id="mecanicos_id"
                                     name="mecanicos_id[]"
                                     multiple={true}
@@ -180,20 +203,23 @@ export default function AddService({ mechanics, materials, aircrafts }: Props) {
                                         </option>
                                     ))}
                                 </select> */}
-                                <InputError message={errors.mecanicos_id} />
-                            </div>
-                            <div className="grid gap-2">
-                                <Label htmlFor="material_id">
-                                    Selecione os materiais para o serviço
-                                </Label>
+                                        <InputError
+                                            message={errors.mecanicos_id}
+                                        />
+                                    </div>
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="material_id">
+                                            Selecione os materiais para o
+                                            serviço
+                                        </Label>
 
-                                <MultiSelect
-                                    name="material_id[]"
-                                    options={materialOPTIONS}
-                                    selected={selectedMaterialValues}
-                                    onChange={setSelectedMaterialValues}
-                                />
-                                {/*<select
+                                        <MultiSelect
+                                            name="material_id[]"
+                                            options={materialOPTIONS}
+                                            selected={selectedMaterialValues}
+                                            onChange={setSelectedMaterialValues}
+                                        />
+                                        {/*<select
                                     id="material_id"
                                     name="material_id[]"
                                     multiple={true}
@@ -206,11 +232,18 @@ export default function AddService({ mechanics, materials, aircrafts }: Props) {
                                         </option>
                                     ))}
                                 </select> */}
-                                <InputError message={errors.material_id} />
-                            </div>
-                            <div className="flex items-center gap-4">
-                                <Button disabled={processing}>Guardar</Button>
-                            </div>
+                                        <InputError
+                                            message={errors.material_id}
+                                        />
+                                    </div>
+                                </CardContent>
+
+                                <CardFooter className="justify-end border-t pt-6">
+                                    <Button disabled={processing}>
+                                        Guardar
+                                    </Button>
+                                </CardFooter>
+                            </Card>
                         </>
                     )}
                 </Form>
