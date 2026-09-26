@@ -45,11 +45,17 @@ class UserFactory extends Factory
     {
         return $this->afterCreating(function ($user) {
             $team = Team::factory()->personal()->create([
-                'name' => $user->name."'s Team",
+                'name' =>"Administrador",
+                'slug' =>"administrador",
             ]);
 
             $team->members()->attach($user, [
                 'role' => TeamRole::Owner->value,
+            ]);
+
+            $team = Team::factory()->personal()->create([
+                'name' => "Recepcionista",
+                'slug' =>"recepcionista",
             ]);
 
             $user->switchTeam($team);
